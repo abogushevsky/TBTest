@@ -1,0 +1,5 @@
+﻿
+
+GO
+
+GRANT CONNECT TO [TBAppUsr]

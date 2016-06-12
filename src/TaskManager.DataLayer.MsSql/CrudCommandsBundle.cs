@@ -7,9 +7,9 @@ namespace TaskManager.DataLayer.MsSql
     /// <summary>
     /// Структура представялет команду SQL
     /// </summary>
-    public struct CrudCommand
+    public struct SqlCommandInfo
     {
-        public CrudCommand(string command, CommandType commandType) : this()
+        public SqlCommandInfo(string command, CommandType commandType) : this()
         {
             Contract.Requires(!string.IsNullOrEmpty(command));
 
@@ -36,26 +36,26 @@ namespace TaskManager.DataLayer.MsSql
         /// <summary>
         /// Команда для получения всех сущностей репозитория
         /// </summary>
-        public CrudCommand GetAllCommand { get; set; }
+        public SqlCommandInfo GetAllCommand { get; set; }
 
         /// <summary>
         /// Команда для получения сущности по идентификатору
         /// </summary>
-        public CrudCommand GetByIdCommand { get; set; }
+        public SqlCommandInfo GetByIdCommand { get; set; }
 
         /// <summary>
         /// Команда для добавления новой сущности
         /// </summary>
-        public CrudCommand CreateCommand { get; set; }
+        public SqlCommandInfo CreateCommand { get; set; }
 
         /// <summary>
         /// Команда для обновления сущности
         /// </summary>
-        public CrudCommand UpdateCommand { get; set; }
+        public SqlCommandInfo UpdateCommand { get; set; }
 
         /// <summary>
         /// Команда для удаления сущности
         /// </summary>
-        public CrudCommand DeleteCommand { get; set; }
+        public SqlCommandInfo DeleteCommand { get; set; }
     }
 }

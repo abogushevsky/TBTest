@@ -2,19 +2,33 @@
 using System.Threading.Tasks;
 using TaskManager.Common.Entities;
 using TaskManager.Common.Interfaces;
+using TaskManager.DataLayer.Common.Filters;
 using TaskManager.DataLayer.Common.Interfaces;
 
 namespace TaskManager.BusinessLayer
 {
     public class TaskService : EntityServiceBase<UserTask, int>, ITaskService
     {
+        private readonly IFilteredRepository<UserTask, TasksByUserFilter> tasksByUserFilter;
+        private readonly IFilteredRepository<UserTask, TasksByCategoryFilter> tasksByCategoryFilter;
+
         /// <summary>
         /// .ctor
         /// </summary>
         /// <param name="repository">Репозитория для сущностей типа <see cref="UserTask"/></param>
-        public TaskService(IRepository<UserTask, int> repository) : base(repository)
+        /// <param name="tasksByUserFilter">Фильтр по пользователям</param>
+        /// <param name="tasksByCategoryFilter">Фильтр по категориям</param>
+        public TaskService(
+            IRepository<UserTask, int> repository,
+            IFilteredRepository<UserTask, TasksByUserFilter> tasksByUserFilter,
+            IFilteredRepository<UserTask, TasksByCategoryFilter> tasksByCategoryFilter) : base(repository)
         {
             Contract.Requires(repository != null);
+            Contract.Requires(tasksByUserFilter != null);
+            Contract.Requires(tasksByCategoryFilter != null);
+
+            this.tasksByUserFilter = tasksByUserFilter;
+            this.tasksByCategoryFilter = tasksByCategoryFilter;
         }
 
         /// <summary>
@@ -24,7 +38,7 @@ namespace TaskManager.BusinessLayer
         /// <returns>Найденные задачи пользователя, или пустой массив</returns>
         public async Task<UserTask[]> GetAllUserTasksAsync(string userId)
         {
-            throw new System.NotImplementedException();
+            return await ExecAsync(() => this.tasksByUserFilter.FilterAsync(new TasksByUserFilter(userId)));
         }
 
         /// <summary>
@@ -34,7 +48,7 @@ namespace TaskManager.BusinessLayer
         /// <returns>Найденные задачи по категории, или пустой массив</returns>
         public async Task<UserTask[]> GetTasksByCategoryAsync(int categoryId)
         {
-            throw new System.NotImplementedException();
+            return await ExecAsync(() => this.tasksByCategoryFilter.FilterAsync(new TasksByCategoryFilter(categoryId)));
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace TaskManager.DataLayer.MsSql
     /// <typeparam name="TEntity">Тип сущности</typeparam>
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>
     /// <typeparam name="TDto">Тип DTO</typeparam>
-    public class SqlRepository<TEntity, TKey, TDto> : IRepository<TEntity, TKey> 
+    public class CrudSqlRepository<TEntity, TKey, TDto> : SqlRepositoryBase, IRepository<TEntity, TKey> 
         where TEntity : IEntityWithId<TKey> 
         where TDto : class
     {
@@ -29,7 +29,7 @@ namespace TaskManager.DataLayer.MsSql
         /// </summary>
         /// <param name="converter">Конвертер для перевода сущностей в DTO и обратно</param>
         /// <param name="commands">Связка команд SQL</param>
-        protected SqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands)
+        protected CrudSqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands)
         {
             Contract.Ensures(converter != null);
             Contract.Ensures(commands != null);
@@ -102,33 +102,6 @@ namespace TaskManager.DataLayer.MsSql
         public async Task<bool> DeleteAsync(TKey id)
         {
             return (await UsingConnectionAsync<int>(this.commands.DeleteCommand, new { Id = id })).FirstOrDefault() > 0;
-        }
-
-        private Task<IEnumerable<TResult>> UsingConnectionAsync<TResult>(CrudCommand command, object param)
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection())
-                {
-                    return connection.QueryAsync<TResult>(command.Command, param: param,
-                        commandType: command.CommandType);
-                }
-            }
-            catch (SqlException sqlEx)
-            {
-                if (sqlEx.ErrorCode == ConcurrentUpdateException.ERROR_CODE)
-                {
-                    throw new ConcurrentUpdateException();
-                }
-
-                //TODO: log
-                throw new RepositoryException();
-            }
-            catch (Exception ex)
-            {
-                //TODO: log
-                throw new RepositoryException();
-            }
         }
     }
 }

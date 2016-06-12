@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -89,21 +90,8 @@ namespace TaskManager.DataLayer.MsSql
         /// <exception cref="ConcurrentUpdateException">При попытке обновить сущность с устаревшим временем последнего обновления</exception>
         public async Task<bool> UpdateAsync(TEntity entity)
         {
-            try
-            {
-                return
-                    (await UsingConnectionAsync<int>(this.commands.UpdateCommand, this.converter.Convert(entity)))
-                        .FirstOrDefault() > 0;
-            }
-            catch (SqlException ex)
-            {
-                if (ex.ErrorCode == ConcurrentUpdateException.ERROR_CODE)
-                {
-                    throw new ConcurrentUpdateException();
-                }
-
-                throw new RepositoryException(ex);
-            }
+            return (await UsingConnectionAsync<int>(this.commands.UpdateCommand, this.converter.Convert(entity)))
+                    .FirstOrDefault() > 0;
         }
 
         /// <summary>
@@ -118,9 +106,28 @@ namespace TaskManager.DataLayer.MsSql
 
         private Task<IEnumerable<TResult>> UsingConnectionAsync<TResult>(CrudCommand command, object param)
         {
-            using (SqlConnection connection = new SqlConnection())
+            try
             {
-                return connection.QueryAsync<TResult>(command.Command, param: param, commandType: command.CommandType);
+                using (SqlConnection connection = new SqlConnection())
+                {
+                    return connection.QueryAsync<TResult>(command.Command, param: param,
+                        commandType: command.CommandType);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                if (sqlEx.ErrorCode == ConcurrentUpdateException.ERROR_CODE)
+                {
+                    throw new ConcurrentUpdateException();
+                }
+
+                //TODO: log
+                throw new RepositoryException();
+            }
+            catch (Exception ex)
+            {
+                //TODO: log
+                throw new RepositoryException();
             }
         }
     }

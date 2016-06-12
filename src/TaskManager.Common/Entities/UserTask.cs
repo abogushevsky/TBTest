@@ -5,7 +5,7 @@ namespace TaskManager.Common.Entities
     /// <summary>
     /// Задача
     /// </summary>
-    public class Task : EntityBase
+    public class UserTask : EntityBase //UserTask вместо Task, чтобы имя не пересекалось с System.Threading.Tasks.Task
     {
         /// <summary>
         /// Название задачи или краткое описание

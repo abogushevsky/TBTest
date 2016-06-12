@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\Task.cs" />
     <Compile Include="Entities\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

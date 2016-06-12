@@ -44,6 +44,8 @@
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\Task.cs" />
     <Compile Include="Entities\UserInfo.cs" />
+    <Compile Include="Interfaces\IEntityWithId.cs" />
+    <Compile Include="Interfaces\ITaskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

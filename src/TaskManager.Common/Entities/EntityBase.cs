@@ -1,11 +1,12 @@
 ﻿using System;
+using TaskManager.Common.Interfaces;
 
 namespace TaskManager.Common.Entities
 {
     /// <summary>
     /// Базовый класс для всех сущностей
     /// </summary>
-    public abstract class EntityBase
+    public abstract class EntityBase : IEntityWithId<int>
     {
         /// <summary>
         /// Уникальный идентификатор

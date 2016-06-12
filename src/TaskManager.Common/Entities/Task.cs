@@ -28,8 +28,8 @@ namespace TaskManager.Common.Entities
         public Category Category { get; set; }
 
         /// <summary>
-        /// Идентификатор пользователя, которому принадлежит задача
+        /// Информация о пользователе, которому принадлежит задача
         /// </summary>
-        public string UserId { get; set; }
+        public UserInfo User { get; set; }
     }
 }

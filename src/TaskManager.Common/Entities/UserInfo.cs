@@ -1,9 +1,11 @@
-﻿namespace TaskManager.Common.Entities
+﻿using TaskManager.Common.Interfaces;
+
+namespace TaskManager.Common.Entities
 {
     /// <summary>
     /// Информация о пользователе
     /// </summary>
-    public class UserInfo
+    public class UserInfo : IEntityWithId<string>
     {
         /// <summary>
         /// Уникальный идентификатор

@@ -16,17 +16,25 @@ namespace TaskManager.DataLayer.MsSql
     /// <typeparam name="TEntity">Тип сущности</typeparam>
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>
     /// <typeparam name="TDto">Тип DTO</typeparam>
-    public abstract class SqlRepositoryBase<TEntity, TKey, TDto> : IRepository<TEntity, TKey> 
+    public class SqlRepository<TEntity, TKey, TDto> : IRepository<TEntity, TKey> 
         where TEntity : IEntityWithId<TKey> 
         where TDto : class
     {
         private readonly IEntityDtoConverter<TEntity, TDto> converter;
+        private readonly CrudCommandsBundle commands;
 
-        protected SqlRepositoryBase(IEntityDtoConverter<TEntity, TDto> converter)
+        /// <summary>
+        /// .ctor
+        /// </summary>
+        /// <param name="converter">Конвертер для перевода сущностей в DTO и обратно</param>
+        /// <param name="commands">Связка команд SQL</param>
+        protected SqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands)
         {
             Contract.Ensures(converter != null);
+            Contract.Ensures(commands != null);
 
             this.converter = converter;
+            this.commands = commands;
         }
 
         /// <summary>
@@ -34,7 +42,7 @@ namespace TaskManager.DataLayer.MsSql
         /// </summary>
         public async Task<TEntity[]> GetAllAsync()
         {
-            TDto[] result = (await UsingConnectionAsync<TDto>(this.Commands.GetAllCommand, null)).ToArray();
+            TDto[] result = (await UsingConnectionAsync<TDto>(this.commands.GetAllCommand, null)).ToArray();
             return result.Select(this.converter.Convert).ToArray();
         }
 
@@ -45,7 +53,7 @@ namespace TaskManager.DataLayer.MsSql
         /// <returns>Найденная сущность или null</returns>
         public async Task<TEntity> GetByIdAsync(TKey id)
         {
-            TDto[] result = (await UsingConnectionAsync<TDto>(this.Commands.GetByIdCommand, new {Id = id})).ToArray();
+            TDto[] result = (await UsingConnectionAsync<TDto>(this.commands.GetByIdCommand, new {Id = id})).ToArray();
             return result.Any() ? this.converter.Convert(result.First()) : default(TEntity);
         }
 
@@ -60,7 +68,7 @@ namespace TaskManager.DataLayer.MsSql
             try
             {
                 IEnumerable<TKey> result =
-                    (await UsingConnectionAsync<TKey>(this.Commands.CreateCommand, this.converter.Convert(entity)))
+                    (await UsingConnectionAsync<TKey>(this.commands.CreateCommand, this.converter.Convert(entity)))
                         .ToArray();
 
                 if (result.Any())
@@ -78,9 +86,24 @@ namespace TaskManager.DataLayer.MsSql
         /// </summary>
         /// <param name="entity">Изменённая сущность</param>
         /// <returns>true, если операция затронула > 0 сущностей. false в противном случае</returns>
+        /// <exception cref="ConcurrentUpdateException">При попытке обновить сущность с устаревшим временем последнего обновления</exception>
         public async Task<bool> UpdateAsync(TEntity entity)
         {
-            return (await UsingConnectionAsync<int>(this.Commands.UpdateCommand, this.converter.Convert(entity))).FirstOrDefault() > 0;
+            try
+            {
+                return
+                    (await UsingConnectionAsync<int>(this.commands.UpdateCommand, this.converter.Convert(entity)))
+                        .FirstOrDefault() > 0;
+            }
+            catch (SqlException ex)
+            {
+                if (ex.ErrorCode == ConcurrentUpdateException.ERROR_CODE)
+                {
+                    throw new ConcurrentUpdateException();
+                }
+
+                throw new RepositoryException(ex);
+            }
         }
 
         /// <summary>
@@ -90,7 +113,7 @@ namespace TaskManager.DataLayer.MsSql
         /// <returns>true, если операция затронула > 0 сущностей. false в противном случае</returns>
         public async Task<bool> DeleteAsync(TKey id)
         {
-            return (await UsingConnectionAsync<int>(this.Commands.DeleteCommand, new { Id = id })).FirstOrDefault() > 0;
+            return (await UsingConnectionAsync<int>(this.commands.DeleteCommand, new { Id = id })).FirstOrDefault() > 0;
         }
 
         private Task<IEnumerable<TResult>> UsingConnectionAsync<TResult>(CrudCommand command, object param)
@@ -100,7 +123,5 @@ namespace TaskManager.DataLayer.MsSql
                 return connection.QueryAsync<TResult>(command.Command, param: param, commandType: command.CommandType);
             }
         }
-
-        protected abstract CrudCommandsBundle Commands { get; }
     }
 }

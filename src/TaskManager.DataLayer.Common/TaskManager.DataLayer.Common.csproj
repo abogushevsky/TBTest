@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ConcurrentUpdateException.cs" />
     <Compile Include="Exceptions\EntityCreateException.cs" />
     <Compile Include="Exceptions\RepositoryException.cs" />
     <Compile Include="Interfaces\IEntityDtoConverter.cs" />

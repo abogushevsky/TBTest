@@ -12,16 +12,22 @@ namespace TaskManager.DataLayer.MsSql
     {
         protected Task<IEnumerable<TResult>> UsingConnectionAsync<TResult>(SqlCommandInfo command, object param)
         {
+            SqlTransaction transaction = null;
             try
             {
                 using (SqlConnection connection = new SqlConnection())
                 {
-                    return connection.QueryAsync<TResult>(command.Command, param: param,
+                    transaction = connection.BeginTransaction();
+                    Task<IEnumerable<TResult>> result = connection.QueryAsync<TResult>(command.Command, param: param,
                         commandType: command.CommandType);
+
+                    transaction.Commit();
+                    return result;
                 }
             }
             catch (SqlException sqlEx)
             {
+                if (transaction != null) transaction.Rollback();
                 if (sqlEx.ErrorCode == ConcurrentUpdateException.ERROR_CODE)
                 {
                     throw new ConcurrentUpdateException();
@@ -32,6 +38,7 @@ namespace TaskManager.DataLayer.MsSql
             }
             catch (Exception ex)
             {
+                if (transaction != null) transaction.Rollback();
                 //TODO: log
                 throw new RepositoryException();
             }

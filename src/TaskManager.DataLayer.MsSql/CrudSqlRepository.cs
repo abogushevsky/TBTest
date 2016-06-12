@@ -29,7 +29,7 @@ namespace TaskManager.DataLayer.MsSql
         /// </summary>
         /// <param name="converter">Конвертер для перевода сущностей в DTO и обратно</param>
         /// <param name="commands">Связка команд SQL</param>
-        protected CrudSqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands)
+        public CrudSqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands)
         {
             Contract.Ensures(converter != null);
             Contract.Ensures(commands != null);

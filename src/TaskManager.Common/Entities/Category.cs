@@ -11,8 +11,8 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Идентификатор пользователя, которому принадлежит категория
+        /// Пользователь, которому принадлежит категория
         /// </summary>
-        public string UserId { get; set; }
+        public UserInfo User { get; set; }
     }
 }

@@ -48,8 +48,8 @@ namespace TaskManager.Web.Controllers
         {
             if (category == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Resources.DataNotSet);
-            await this.categoriesService.AddCategoryAsync(category.ToCategory(await GetCurrentUser()));
-            return this.Request.CreateResponse(HttpStatusCode.OK);
+            int id = await this.categoriesService.AddCategoryAsync(category.ToCategory(await GetCurrentUser()));
+            return this.Request.CreateResponse(id);
         }
 
         // PUT api/<controller>/5

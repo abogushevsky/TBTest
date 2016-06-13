@@ -17,3 +17,11 @@
 .add-task-btn {
     font-size: 30pt;
 }
+
+.cat-button {
+    font-size: 15pt;
+}
+
+textarea {
+    resize: none;
+}

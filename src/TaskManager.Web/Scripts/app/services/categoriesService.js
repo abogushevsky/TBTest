@@ -1,4 +1,4 @@
-﻿angular.module("app.services").factory("tasksService", [
+﻿angular.module("app.services").factory("categoriesService", [
     "$http", "$q",
     function ($http, $q) {
         function handleSuccess(resp) {
@@ -12,25 +12,25 @@
 
         return {
             getList: function() {
-                return $http.get("api/tasks").then(
+                return $http.get("api/categories").then(
                     handleSuccess,
                     handleError);
             },
             getById: function(id) {
-                return $http.get("api/tasks/" + id)
+                return $http.get("api/categories/" + id)
                     .then(
                         handleSuccess,
                         handleError
                     );
             },
-            addTask: function(task) {
-                return $http.post("api/tasks", task).then(handleSuccess, handleError);
+            addCategory: function(category) {
+                return $http.post("api/categories", category).then(handleSuccess, handleError);
             },
-            updateTask: function(task) {
-                return $http.put("api/tasks", task).then(handleSuccess, handleError);
+            updateCategory: function (category) {
+                return $http.put("api/categories", category).then(handleSuccess, handleError);
             },
-            deleteTask: function(id) {
-                return $http.delete("api/tasks/" + id).then(
+            deleteCategory: function (id) {
+                return $http.delete("api/categories/" + id).then(
                     handleSuccess,
                     handleError);
             }

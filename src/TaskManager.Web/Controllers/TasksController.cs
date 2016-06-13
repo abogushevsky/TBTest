@@ -50,8 +50,8 @@ namespace TaskManager.Web.Controllers
         {
             if (task == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Resources.DataNotSet);
-            await this.taskService.AddTaskAsync(task.ToUserTask(await GetCurrentUser()));
-            return this.Request.CreateResponse(HttpStatusCode.OK);
+            int id = await this.taskService.AddTaskAsync(task.ToUserTask(await GetCurrentUser()));
+            return this.Request.CreateResponse(id);
         }
 
         // PUT api/<controller>/5

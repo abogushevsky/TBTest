@@ -4,7 +4,7 @@ using TaskManager.DataLayer.Common.Interfaces;
 
 namespace TaskManager.DataLayer.MsSql.Dto
 {
-    public class CategoryDto
+    public class CategoryDto : SqlDto
     {
         public int Id { get; set; }
 
@@ -16,7 +16,30 @@ namespace TaskManager.DataLayer.MsSql.Dto
 
         public string UserLastName { get; set; }
 
-        public long ModifiedTimestamp { get; set; }
+        public byte[] ModifiedTimestamp { get; set; }
+
+        #region Overrides of DtoBase
+
+        public override object GetParametersForInsert()
+        {
+            return new
+            {
+                Name = this.Name,
+                UserId = this.UserId
+            };
+        }
+
+        public override object GetParametersForUpdate()
+        {
+            return new
+            {
+                Id = this.Id,
+                Name = this.Name,
+                UserId = this.UserId
+            };
+        }
+
+        #endregion
     }
 
     public class CategoryConverter : IEntityDtoConverter<Category, CategoryDto>
@@ -34,7 +57,8 @@ namespace TaskManager.DataLayer.MsSql.Dto
                 Name = entity.Name,
                 UserId = entity.User.Id,
                 UserFirstName = entity.User.FirstName,
-                UserLastName = entity.User.LastName
+                UserLastName = entity.User.LastName,
+                ModifiedTimestamp = entity.ModifiedTimestamp
             };
         }
 
@@ -52,7 +76,8 @@ namespace TaskManager.DataLayer.MsSql.Dto
                     Id = dto.UserId,
                     FirstName = dto.UserFirstName,
                     LastName = dto.UserLastName
-                }
+                },
+                ModifiedTimestamp = dto.ModifiedTimestamp
             };
         }
     }

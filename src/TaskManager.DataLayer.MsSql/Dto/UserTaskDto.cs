@@ -5,7 +5,7 @@ using TaskManager.DataLayer.Common.Interfaces;
 
 namespace TaskManager.DataLayer.MsSql.Dto
 {
-    public class UserTaskDto
+    public class UserTaskDto : SqlDto
     {
         public int Id { get; set; }
 
@@ -21,7 +21,41 @@ namespace TaskManager.DataLayer.MsSql.Dto
 
         public string UserLastName { get; set; }
 
-        public long ModifiedTimestamp { get; set; }
+        public string CategoryName { get; set; }
+
+        public int? CategoryId { get; set; }
+
+        public byte[] ModifiedTimestamp { get; set; }
+
+        #region Overrides of SqlDto
+
+        public override object GetParametersForInsert()
+        {
+            return new
+            {
+                Title = this.Title,
+                Details = this.Details,
+                DueDate = this.DueDate,
+                CategoryId = this.CategoryId,
+                UserId = this.UserId
+            };
+        }
+
+        public override object GetParametersForUpdate()
+        {
+            return new
+            {
+                Id = this.Id,
+                Title = this.Title,
+                Details = this.Details,
+                DueDate = this.DueDate,
+                CategoryId = this.CategoryId,
+                UserId = this.UserId,
+                ModifiedTimestamp = this.ModifiedTimestamp
+            };
+        }
+
+        #endregion
     }
 
     public class UserTaskConverter : IEntityDtoConverter<UserTask, UserTaskDto>
@@ -39,9 +73,12 @@ namespace TaskManager.DataLayer.MsSql.Dto
                 Title = entity.Title,
                 Details = entity.Details,
                 DueDate = entity.DueDate,
+                CategoryId = entity.Category != null ? entity.Category.Id : (int?)null,
+                CategoryName = entity.Category != null ? entity.Category.Name : null,
                 UserId = entity.User.Id,
                 UserFirstName = entity.User.FirstName,
-                UserLastName = entity.User.LastName
+                UserLastName = entity.User.LastName,
+                ModifiedTimestamp = entity.ModifiedTimestamp
             };
         }
 
@@ -56,12 +93,18 @@ namespace TaskManager.DataLayer.MsSql.Dto
                 Title = dto.Title,
                 Details = dto.Details,
                 DueDate = dto.DueDate,
+                Category = dto.CategoryId.HasValue ? new Category()
+                {
+                    Id = dto.CategoryId.Value,
+                    Name = dto.CategoryName
+                } : null,
                 User = new UserInfo()
                 {
                     Id = dto.UserId,
                     FirstName = dto.UserFirstName,
                     LastName = dto.UserLastName
-                }
+                },
+                ModifiedTimestamp = dto.ModifiedTimestamp
             };
         }
     }

@@ -8,6 +8,7 @@ using Dapper;
 using TaskManager.Common.Interfaces;
 using TaskManager.DataLayer.Common.Exceptions;
 using TaskManager.DataLayer.Common.Interfaces;
+using TaskManager.DataLayer.MsSql.Dto;
 
 namespace TaskManager.DataLayer.MsSql
 {
@@ -19,7 +20,7 @@ namespace TaskManager.DataLayer.MsSql
     /// <typeparam name="TDto">Тип DTO</typeparam>
     public class CrudSqlRepository<TEntity, TKey, TDto> : SqlRepositoryBase, IRepository<TEntity, TKey> 
         where TEntity : IEntityWithId<TKey> 
-        where TDto : class
+        where TDto : SqlDto
     {
         private readonly IEntityDtoConverter<TEntity, TDto> converter;
         private readonly CrudCommandsBundle commands;
@@ -71,12 +72,14 @@ namespace TaskManager.DataLayer.MsSql
         {
             try
             {
-                IEnumerable<TKey> result =
-                    (await UsingConnectionAsync<TKey>(this.commands.CreateCommand, this.converter.Convert(entity)))
+                var result =
+                    (await UsingConnectionAsync<dynamic>(this.commands.CreateCommand, this.converter.Convert(entity).GetParametersForInsert()))
                         .ToArray();
 
                 if (result.Any())
-                    return result.First();
+                {
+                    return (TKey) result.First().Result;
+                }
                 throw new EntityCreateException();
             }
             catch (SqlException ex)
@@ -93,8 +96,17 @@ namespace TaskManager.DataLayer.MsSql
         /// <exception cref="ConcurrentUpdateException">При попытке обновить сущность с устаревшим временем последнего обновления</exception>
         public async Task<bool> UpdateAsync(TEntity entity)
         {
-            return (await UsingConnectionAsync<int>(this.commands.UpdateCommand, this.converter.Convert(entity)))
-                    .FirstOrDefault() > 0;
+            var result = (await
+                UsingConnectionAsync<dynamic>(this.commands.UpdateCommand,
+                    this.converter.Convert(entity).GetParametersForUpdate()))
+                .FirstOrDefault() > 0;
+            if (result.Any())
+            {
+                int rowsAffected = (int) result.First().Result;
+                return rowsAffected > 0;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -104,7 +116,14 @@ namespace TaskManager.DataLayer.MsSql
         /// <returns>true, если операция затронула > 0 сущностей. false в противном случае</returns>
         public async Task<bool> DeleteAsync(TKey id)
         {
-            return (await UsingConnectionAsync<int>(this.commands.DeleteCommand, new { Id = id })).FirstOrDefault() > 0;
+            var result = (await UsingConnectionAsync<dynamic>(this.commands.DeleteCommand, new { Id = id })).FirstOrDefault() > 0;
+            if (result.Any())
+            {
+                int rowsAffected = (int)result.First().Result;
+                return rowsAffected > 0;
+            }
+
+            return false;
         }
     }
 }

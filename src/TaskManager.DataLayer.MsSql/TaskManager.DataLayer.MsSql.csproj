@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CrudCommandsBundle.cs" />
     <Compile Include="Dto\CategoryDto.cs" />
+    <Compile Include="Dto\SqlDto.cs" />
     <Compile Include="Dto\UserInfoDto.cs" />
     <Compile Include="Dto\UserTaskDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -24,10 +24,10 @@ namespace TaskManager.DataLayer.MsSql
 
         protected async Task<IEnumerable<TResult>> UsingConnectionAsync<TResult>(SqlCommandInfo command, object param)
         {
-            SqlTransaction transaction = null;
-            try
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                using (SqlConnection connection = new SqlConnection(this.connectionString))
+                SqlTransaction transaction = null;
+                try
                 {
                     await connection.OpenAsync();
                     transaction = connection.BeginTransaction();
@@ -37,23 +37,23 @@ namespace TaskManager.DataLayer.MsSql
                     transaction.Commit();
                     return result;
                 }
-            }
-            catch (SqlException sqlEx)
-            {
-                if (transaction != null) transaction.Rollback();
-                if (sqlEx.ErrorCode == ConcurrentUpdateException.ERROR_CODE)
+                catch (SqlException sqlEx)
                 {
-                    throw new ConcurrentUpdateException();
-                }
+                    if (transaction != null) transaction.Rollback();
+                    if (sqlEx.ErrorCode == ConcurrentUpdateException.ERROR_CODE)
+                    {
+                        throw new ConcurrentUpdateException();
+                    }
 
-                //TODO: log
-                throw new RepositoryException();
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null) transaction.Rollback();
-                //TODO: log
-                throw new RepositoryException();
+                    //TODO: log
+                    throw new RepositoryException();
+                }
+                catch (Exception ex)
+                {
+                    if (transaction != null) transaction.Rollback();
+                    //TODO: log
+                    throw new RepositoryException();
+                }
             }
         }
     }

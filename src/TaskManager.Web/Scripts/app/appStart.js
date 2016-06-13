@@ -1,7 +1,7 @@
 ﻿angular.module("app.controllers", []);
 angular.module("app.services", []);
 
-angular.module("app", ["ui.router", "app.controllers", "app.services", "ngRoute"]).config([
+angular.module("app", ["ui.router", "app.controllers", "app.services", "ui.bootstrap", "ngRoute"]).config([
     "$stateProvider", "$urlRouterProvider", "$httpProvider",
     function($stateProvider, $urlRouterProvider, $httpProvider) {
         $urlRouterProvider.otherwise("/");
@@ -47,6 +47,12 @@ angular.module("app", ["ui.router", "app.controllers", "app.services", "ngRoute"
                 url: "/",
                 templateUrl: "Templates/TasksList.html",
                 controller: "tasksListCtrl"
+            })
+            .state("task",
+            {
+                url: "/task/:id",
+                templateUrl: "Templates/TaskForm.html",
+                controller: "taskCtrl"
             });
     }
 ]);

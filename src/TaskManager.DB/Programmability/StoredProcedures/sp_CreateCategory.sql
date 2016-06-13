@@ -2,6 +2,8 @@
 	@Name nvarchar(128),
 	@UserId nvarchar(128)
 AS
+BEGIN
 	INSERT INTO [dbo].[Categories] (Name, UserId) 
 	VALUES (@Name, @UserId)
-RETURN SCOPE_IDENTITY()
+	SELECT SCOPE_IDENTITY() AS Result
+END

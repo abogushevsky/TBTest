@@ -1,5 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[sp_DeleteCategory]
 	@Id int
 AS
+BEGIN
 	DELETE FROM [dbo].[Categories] WHERE Id = @Id
-RETURN @@ROWCOUNT
+	SELECT @@ROWCOUNT AS Result
+END

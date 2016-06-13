@@ -36,11 +36,11 @@ namespace TaskManager.BusinessLayer
         /// <typeparam name="TResult">Тип результата</typeparam>
         /// <param name="asyncFunc">Асинхронная функция, выполняющая конкретные действия</param>
         /// <returns>Результат выполнения действия</returns>
-        protected Task<TResult> ExecAsync<TResult>(Func<Task<TResult>> asyncFunc)
+        protected async Task<TResult> ExecAsync<TResult>(Func<Task<TResult>> asyncFunc)
         {
             try
             {
-                return asyncFunc();
+                return await asyncFunc();
             }
             catch (ConcurrentUpdateException)
             {

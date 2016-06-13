@@ -2,7 +2,7 @@
 {
     public class ConcurrentUpdateException : RepositoryException
     {
-        public const int ERROR_CODE = -2;
+        public const int ERROR_CODE = 50005;
 
         public ConcurrentUpdateException() : base()
         {

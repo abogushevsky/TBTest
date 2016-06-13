@@ -5,6 +5,8 @@
 	@CategoryId int,
 	@UserId nvarchar(128)
 AS
+BEGIN
 	INSERT INTO [dbo].[Tasks] (Title, Details, DueDate, CategoryId, UserId) 
 	VALUES (@Title, @Details, @DueDate, @CategoryId, @UserId)
-RETURN SCOPE_IDENTITY()
+	SELECT SCOPE_IDENTITY() AS Result
+END

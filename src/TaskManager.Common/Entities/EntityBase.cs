@@ -16,6 +16,6 @@ namespace TaskManager.Common.Entities
         /// <summary>
         /// Дата последнего изменения
         /// </summary>
-        public DateTime LastModifiedDate { get; set; }
+        public byte[] ModifiedTimestamp { get; set; }
     }
 }

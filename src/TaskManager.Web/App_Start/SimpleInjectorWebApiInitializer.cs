@@ -50,7 +50,7 @@ namespace TaskManager.Web
                 new SimpleInjectorWebApiDependencyResolver(_container);
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(_container));
 
-            _container.Register<AccountController>(() => new AccountController(Resolve<IUsersService>()));
+            _container.Register<AccountController>(() => new AccountController());
         }
 
         private static void InitConverters()

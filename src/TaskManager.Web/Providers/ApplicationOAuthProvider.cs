@@ -37,6 +37,7 @@ namespace TaskManager.Web.Providers
             if (user == null)
             {
                 context.SetError("invalid_grant", Resources.InvalidUserGrant);
+                context.OwinContext.Authentication.SignOut();
                 return;
             }
 

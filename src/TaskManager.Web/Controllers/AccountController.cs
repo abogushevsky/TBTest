@@ -28,26 +28,19 @@ namespace TaskManager.Web.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private readonly IUsersService usersService;
 
-        public AccountController(IUsersService usersService)
+        public AccountController()
         {
-            Contract.Requires(usersService != null);
-
-            this.usersService = usersService;
         }
 
         public AccountController(
             ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat, 
-            IUsersService usersService)
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
             Contract.Requires(userManager != null);
-            Contract.Requires(usersService != null);
 
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
-            this.usersService = usersService;
         }
 
         public ApplicationUserManager UserManager

@@ -70,13 +70,7 @@
     <Build Include="dbo\Tables\AspNetRoles.sql" />
     <Build Include="dbo\Tables\__MigrationHistory.sql" />
     <Build Include="dbo\Tables\Categories.sql" />
-    <Build Include="dbo\Tables\UserInfos.sql" />
     <Build Include="dbo\Tables\Tasks.sql" />
-    <Build Include="Programmability\StoredProcedures\GetAllUserInfos.sql" />
-    <Build Include="Programmability\StoredProcedures\GetUserInfoById.sql" />
-    <Build Include="Programmability\StoredProcedures\CreateUserInfo.sql" />
-    <Build Include="Programmability\StoredProcedures\UpdateUserInfo.sql" />
-    <Build Include="Programmability\StoredProcedures\DeleteUserInfo.sql" />
     <Build Include="Programmability\StoredProcedures\sp_GetAllTasks.sql" />
     <Build Include="Programmability\StoredProcedures\sp_GeTaskById.sql" />
     <Build Include="Programmability\StoredProcedures\sp_CreateTask.sql" />

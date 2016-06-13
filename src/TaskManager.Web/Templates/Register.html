@@ -55,7 +55,10 @@
     </div>
 </div>
 <div class="row error" ng-show="showError">
-    <div class="col-md-12">{{errorText}}</div>
+    <div class="col-md-12">
+        {{errorText}}
+        <div ng-repeat="error in errors">{{error}}</div>
+    </div>
 </div>
 <form>
     <button type="button" class="btn btn-primary" ng-click="register()">Зарегистрироваться</button>

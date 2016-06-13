@@ -35,25 +35,24 @@ namespace TaskManager.Web.Models
 
     public class RegisterBindingModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "EmailValidationError")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "FirstNameValidationError")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "LastNameValidationError")]
         public string LastName { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "PasswordValidationError")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(ResourceType = typeof(Resources), Name = "RegisterBindingModel_Password_Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(ResourceType = typeof(Resources), Name = "RegisterBindingModel_ConfirmPassword_Confirm_password")]
+        [Compare("Password", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "PasswordConfirmationMismatch")]
         public string ConfirmPassword { get; set; }
     }
 

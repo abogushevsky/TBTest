@@ -11,15 +11,31 @@
 
         $scope.showError = false;
         $scope.errorText = "Не удалось зарегистрироваться";
+        $scope.errors = [];
 
         $scope.register = function () {
             $scope.showError = false;
+            $scope.errors = [];
             authService.register($scope.model)
                 .then(
                     function() { $state.go("main"); },
                     function (err) {
-                        if (err.data.error_description)
-                            $scope.errorText = err.data.error_description;
+                        console.log(err);
+                        var data = err.data;
+                        if (data.error_description)
+                            $scope.errorText = data.error_description;
+                        if (data.ModelState) {
+                            for (var propName in data.ModelState) {
+                                if (data.ModelState.hasOwnProperty(propName)) {
+                                    console.log(data.ModelState[propName]);
+                                    var errorGroup = data.ModelState[propName];
+                                    for (var i = 0; i < errorGroup.length; i++) {
+                                        $scope.errors.push(errorGroup[i]);
+                                    }
+                                }
+                            }
+                        }
+                        console.log($scope.errors);
                         $scope.showError = true;
                     });
         };

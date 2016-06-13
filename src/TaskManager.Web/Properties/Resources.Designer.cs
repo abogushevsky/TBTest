@@ -22,7 +22,7 @@ namespace TaskManager.Web.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace TaskManager.Web.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TaskManager.Web.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace TaskManager.Web.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,18 +61,36 @@ namespace TaskManager.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заполните адрес email.
+        /// </summary>
+        public static string EmailValidationError {
+            get {
+                return ResourceManager.GetString("EmailValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Имя.
         /// </summary>
-        internal static string FirstName {
+        public static string FirstName {
             get {
                 return ResourceManager.GetString("FirstName", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заполните поле &quot;Имя&quot;.
+        /// </summary>
+        public static string FirstNameValidationError {
+            get {
+                return ResourceManager.GetString("FirstNameValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Неверное имя пользователя или пароль.
         /// </summary>
-        internal static string InvalidUserGrant {
+        public static string InvalidUserGrant {
             get {
                 return ResourceManager.GetString("InvalidUserGrant", resourceCulture);
             }
@@ -81,9 +99,54 @@ namespace TaskManager.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Фамилия.
         /// </summary>
-        internal static string LastName {
+        public static string LastName {
             get {
                 return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заполните поле &quot;Фамилия&quot;.
+        /// </summary>
+        public static string LastNameValidationError {
+            get {
+                return ResourceManager.GetString("LastNameValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Пароль и подтверждение пароля не совпадают.
+        /// </summary>
+        public static string PasswordConfirmationMismatch {
+            get {
+                return ResourceManager.GetString("PasswordConfirmationMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Укажите пароль.
+        /// </summary>
+        public static string PasswordValidationError {
+            get {
+                return ResourceManager.GetString("PasswordValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Подтвердение пароля.
+        /// </summary>
+        public static string RegisterBindingModel_ConfirmPassword_Confirm_password {
+            get {
+                return ResourceManager.GetString("RegisterBindingModel_ConfirmPassword_Confirm_password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Пароль.
+        /// </summary>
+        public static string RegisterBindingModel_Password_Password {
+            get {
+                return ResourceManager.GetString("RegisterBindingModel_Password_Password", resourceCulture);
             }
         }
     }

@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.DataProtection;
+using TaskManager.Common.Entities;
+using TaskManager.Common.Interfaces;
 using TaskManager.Web.Models;
 
 namespace TaskManager.Web
@@ -12,14 +15,53 @@ namespace TaskManager.Web
 
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
+        private readonly IUsersService usersService;
+
+        public ApplicationUserManager(IUserStore<ApplicationUser> store, IUsersService usersService)
             : base(store)
         {
+            Contract.Requires(store != null);
+            Contract.Requires(usersService != null);
+
+            this.usersService = usersService;
         }
+
+        //#region Overrides of UserManager<ApplicationUser,string>
+
+        ///// <summary>Create a user with the given password</summary>
+        ///// <param name="user"></param>
+        ///// <param name="password"></param>
+        ///// <returns></returns>
+        //public override async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
+        //{
+        //    IdentityResult result = await base.CreateAsync(user, password);
+
+        //    ApplicationUser createdUser = await FindByNameAsync(user.UserName);
+        //    if (createdUser != null)
+        //    {
+        //        try
+        //        {
+        //            await this.usersService.AddUserAsync(new UserInfo()
+        //            {
+        //                Id = createdUser.Id,
+        //                FirstName = user.FirstName,
+        //                LastName = user.LastName
+        //            });
+        //        }
+        //        catch
+        //        {
+        //            await DeleteAsync(createdUser);
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
+        //#endregion
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+            ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()), SimpleInjectorWebApiInitializer.Resolve<IUsersService>());
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -13,6 +14,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+using TaskManager.Common.Entities;
+using TaskManager.Common.Interfaces;
 using TaskManager.Web.Models;
 using TaskManager.Web.Providers;
 using TaskManager.Web.Results;
@@ -25,16 +28,26 @@ namespace TaskManager.Web.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private readonly IUsersService usersService;
 
-        public AccountController()
+        public AccountController(IUsersService usersService)
         {
+            Contract.Requires(usersService != null);
+
+            this.usersService = usersService;
         }
 
-        public AccountController(ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+        public AccountController(
+            ApplicationUserManager userManager,
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat, 
+            IUsersService usersService)
         {
+            Contract.Requires(userManager != null);
+            Contract.Requires(usersService != null);
+
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+            this.usersService = usersService;
         }
 
         public ApplicationUserManager UserManager
@@ -328,7 +341,13 @@ namespace TaskManager.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            ApplicationUser user = new ApplicationUser()
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
+            };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

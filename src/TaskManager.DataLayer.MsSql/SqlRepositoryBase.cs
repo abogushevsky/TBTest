@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using Dapper;
 using TaskManager.Common.Interfaces;
@@ -10,16 +12,27 @@ namespace TaskManager.DataLayer.MsSql
 {
     public abstract class SqlRepositoryBase
     {
-        protected Task<IEnumerable<TResult>> UsingConnectionAsync<TResult>(SqlCommandInfo command, object param)
+        private readonly string connectionString;
+
+        protected SqlRepositoryBase(string connectionStringName)
+        {
+            Contract.Requires(!string.IsNullOrEmpty(connectionStringName));
+
+            ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            this.connectionString = connectionStringSettings.ConnectionString;
+        }
+
+        protected async Task<IEnumerable<TResult>> UsingConnectionAsync<TResult>(SqlCommandInfo command, object param)
         {
             SqlTransaction transaction = null;
             try
             {
-                using (SqlConnection connection = new SqlConnection())
+                using (SqlConnection connection = new SqlConnection(this.connectionString))
                 {
+                    await connection.OpenAsync();
                     transaction = connection.BeginTransaction();
-                    Task<IEnumerable<TResult>> result = connection.QueryAsync<TResult>(command.Command, param: param,
-                        commandType: command.CommandType);
+                    IEnumerable<TResult> result = await connection.QueryAsync<TResult>(command.Command, param: param,
+                        commandType: command.CommandType, transaction: transaction);
 
                     transaction.Commit();
                     return result;

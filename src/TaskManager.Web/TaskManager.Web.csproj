@@ -284,6 +284,18 @@
     <Compile Include="Migrations\201606110937210_Initial.Designer.cs">
       <DependentUpon>201606110937210_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606130931166_UserModel.cs" />
+    <Compile Include="Migrations\201606130931166_UserModel.Designer.cs">
+      <DependentUpon>201606130931166_UserModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606130935552_FieldsLength.cs" />
+    <Compile Include="Migrations\201606130935552_FieldsLength.Designer.cs">
+      <DependentUpon>201606130935552_FieldsLength.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606131016179_UsersTableRename.cs" />
+    <Compile Include="Migrations\201606131016179_UsersTableRename.Designer.cs">
+      <DependentUpon>201606131016179_UsersTableRename.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1172,6 +1184,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201606110937210_Initial.resx">
       <DependentUpon>201606110937210_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606130931166_UserModel.resx">
+      <DependentUpon>201606130931166_UserModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606130935552_FieldsLength.resx">
+      <DependentUpon>201606130935552_FieldsLength.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606131016179_UsersTableRename.resx">
+      <DependentUpon>201606131016179_UsersTableRename.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

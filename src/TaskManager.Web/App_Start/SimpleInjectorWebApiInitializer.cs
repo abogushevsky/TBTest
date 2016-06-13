@@ -26,6 +26,8 @@ namespace TaskManager.Web
     /// </summary>
     public static class SimpleInjectorWebApiInitializer
     {
+        private const string CONNECTION_STRING_NAME = "DefaultConnection";
+
         private static Container _container;
 
         public static void Initialize()
@@ -46,7 +48,7 @@ namespace TaskManager.Web
                 new SimpleInjectorWebApiDependencyResolver(_container);
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(_container));
 
-            _container.Register<AccountController>(() => new AccountController());
+            _container.Register<AccountController>(() => new AccountController(Resolve<IUsersService>()));
             _container.Options.AllowOverridingRegistrations = false;
         }
 
@@ -84,14 +86,29 @@ namespace TaskManager.Web
                 DeleteCommand = new SqlCommandInfo("DeleteTask", CommandType.StoredProcedure)
             };
 
-            _container.Register<IRepository<UserInfo, string>>(() => new CrudSqlRepository<UserInfo, string, UserInfoDto>(Resolve<IEntityDtoConverter<UserInfo, UserInfoDto>>(), userCommandsBundle));
-            _container.Register<IRepository<Category, int>>(() => new CrudSqlRepository<Category, int, CategoryDto>(Resolve<IEntityDtoConverter<Category, CategoryDto>>(), categoryCommandsBundle));
-            _container.Register<IRepository<UserTask, int>>(() => new CrudSqlRepository<UserTask, int, UserTaskDto>(Resolve<IEntityDtoConverter<UserTask, UserTaskDto>>(), taskCommandsBundle));
+            _container.Register<IRepository<UserInfo, string>>(() => new CrudSqlRepository<UserInfo, string, UserInfoDto>(
+                Resolve<IEntityDtoConverter<UserInfo, UserInfoDto>>(), 
+                userCommandsBundle, 
+                CONNECTION_STRING_NAME));
+            _container.Register<IRepository<Category, int>>(() => new CrudSqlRepository<Category, int, CategoryDto>(
+                Resolve<IEntityDtoConverter<Category, CategoryDto>>(), 
+                categoryCommandsBundle, 
+                CONNECTION_STRING_NAME));
+            _container.Register<IRepository<UserTask, int>>(() => new CrudSqlRepository<UserTask, int, UserTaskDto>(
+                Resolve<IEntityDtoConverter<UserTask, UserTaskDto>>(), 
+                taskCommandsBundle, 
+                CONNECTION_STRING_NAME));
 
-            _container.Register<IFilteredRepository<Category, CategoriesByUserFilter>>(() => new SqlFilteredRepository<Category, CategoriesByUserFilter>(new SqlCommandInfo("GetUserCategories", CommandType.StoredProcedure)));
+            _container.Register<IFilteredRepository<Category, CategoriesByUserFilter>>(() => new SqlFilteredRepository<Category, CategoriesByUserFilter>(
+                new SqlCommandInfo("GetUserCategories", CommandType.StoredProcedure), 
+                CONNECTION_STRING_NAME));
 
-            _container.Register<IFilteredRepository<UserTask, TasksByUserFilter>>(() => new SqlFilteredRepository<UserTask, TasksByUserFilter>(new SqlCommandInfo("GetUserTasks", CommandType.StoredProcedure)));
-            _container.Register<IFilteredRepository<UserTask, TasksByCategoryFilter>>(() => new SqlFilteredRepository<UserTask, TasksByCategoryFilter>(new SqlCommandInfo("GetTasksByCategory", CommandType.StoredProcedure)));
+            _container.Register<IFilteredRepository<UserTask, TasksByUserFilter>>(() => new SqlFilteredRepository<UserTask, TasksByUserFilter>(
+                new SqlCommandInfo("GetUserTasks", CommandType.StoredProcedure),
+                CONNECTION_STRING_NAME));
+            _container.Register<IFilteredRepository<UserTask, TasksByCategoryFilter>>(() => new SqlFilteredRepository<UserTask, TasksByCategoryFilter>(
+                new SqlCommandInfo("GetTasksByCategory", CommandType.StoredProcedure), 
+                CONNECTION_STRING_NAME));
         }
 
         private static void InitEntityServices()

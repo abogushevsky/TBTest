@@ -29,10 +29,13 @@ namespace TaskManager.DataLayer.MsSql
         /// </summary>
         /// <param name="converter">Конвертер для перевода сущностей в DTO и обратно</param>
         /// <param name="commands">Связка команд SQL</param>
-        public CrudSqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands)
+        /// <param name="connectionStringName">Имя строки подключения в конфигурационном файле</param>
+        public CrudSqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands, string connectionStringName)
+            : base(connectionStringName)
         {
             Contract.Ensures(converter != null);
             Contract.Ensures(commands != null);
+            Contract.Requires(!string.IsNullOrEmpty(connectionStringName));
 
             this.converter = converter;
             this.commands = commands;

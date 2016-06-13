@@ -18,9 +18,11 @@ namespace TaskManager.DataLayer.MsSql.Specialized
         /// .ctor
         /// </summary>
         /// <param name="command">Сведения о запросе, который должен быть выполнен в БД</param>
-        public SqlFilteredRepository(SqlCommandInfo command)
+        /// <param name="connectionStringName">Имя строки подключения в конфигурационном файле</param>
+        public SqlFilteredRepository(SqlCommandInfo command, string connectionStringName) : base(connectionStringName)
         {
             Contract.Requires(!string.IsNullOrEmpty(command.Command));
+            Contract.Requires(!string.IsNullOrEmpty(connectionStringName));
 
             this.command = command;
         }

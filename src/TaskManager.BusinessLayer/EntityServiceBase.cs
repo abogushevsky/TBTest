@@ -50,8 +50,9 @@ namespace TaskManager.BusinessLayer
             {
                 throw new BusinessException(Resources.CommonRepositoryExText);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                //TODO: log
                 throw new BusinessException();
             }
         }

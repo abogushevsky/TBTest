@@ -30,6 +30,7 @@ namespace TaskManager.DataLayer.MsSql
                 try
                 {
                     await connection.OpenAsync();
+                    
                     transaction = connection.BeginTransaction();
                     IEnumerable<TResult> result = await connection.QueryAsync<TResult>(command.Command, param: param,
                         commandType: command.CommandType, transaction: transaction);

@@ -9,9 +9,11 @@
 AS
 BEGIN
 	DECLARE @rowVersion timestamp;
-	SELECT @rowVersion = (SELECT ModifiedTimestamp FROM [dbo].[Tasks])
+	SELECT @rowVersion = (SELECT ModifiedTimestamp FROM [dbo].[Tasks] WHERE Id = @Id)
 	IF @ModifiedTimestamp != @rowVersion
-		RAISERROR(50005, 1, 1);
+	BEGIN
+		RAISERROR(50005, 12, 12);
+	END
 
 	UPDATE [dbo].[Tasks] SET Title = @Title, Details = @Details, DueDate = @DueDate, CategoryId = @CategoryId, UserId = @UserId
 	WHERE Id = @Id

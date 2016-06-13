@@ -96,10 +96,9 @@ namespace TaskManager.DataLayer.MsSql
         /// <exception cref="ConcurrentUpdateException">При попытке обновить сущность с устаревшим временем последнего обновления</exception>
         public async Task<bool> UpdateAsync(TEntity entity)
         {
-            var result = (await
+            dynamic[] result = (await
                 UsingConnectionAsync<dynamic>(this.commands.UpdateCommand,
-                    this.converter.Convert(entity).GetParametersForUpdate()))
-                .FirstOrDefault() > 0;
+                    this.converter.Convert(entity).GetParametersForUpdate())).ToArray();
             if (result.Any())
             {
                 int rowsAffected = (int) result.First().Result;

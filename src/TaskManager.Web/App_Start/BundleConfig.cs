@@ -27,9 +27,9 @@ namespace TaskManager.Web
                       "~/Scripts/angular-sanitize.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/app")
+                .Include("~/Scripts/app/appStart.js")
                 .IncludeDirectory("~/Scripts/app/services", "*.js", true)
-                .IncludeDirectory("~/Scripts/app/controllers", "*.js", true)
-                .Include("~/Scripts/app/appStart.js"));
+                .IncludeDirectory("~/Scripts/app/controllers", "*.js", true));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

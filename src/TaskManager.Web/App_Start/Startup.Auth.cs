@@ -43,6 +43,7 @@ namespace TaskManager.Web
                 AllowInsecureHttp = true
             };
 
+            app.UseOAuthAuthorizationServer(OAuthOptions);
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
 

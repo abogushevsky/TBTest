@@ -12,6 +12,7 @@ namespace TaskManager.Web
     {
         public void Configuration(IAppBuilder app)
         {
+            SimpleInjectorWebApiInitializer.Initialize();
             ConfigureAuth(app);
             app.MapSignalR();
         }

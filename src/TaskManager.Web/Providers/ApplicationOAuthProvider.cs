@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using TaskManager.Web.Models;
+using TaskManager.Web.Properties;
 
 namespace TaskManager.Web.Providers
 {
@@ -35,7 +36,7 @@ namespace TaskManager.Web.Providers
 
             if (user == null)
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                context.SetError("invalid_grant", Resources.InvalidUserGrant);
                 return;
             }
 

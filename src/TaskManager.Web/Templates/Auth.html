@@ -22,8 +22,10 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="login()">Войти</button>
-    </div>
+<div class="row error" ng-show="showError">
+    <div class="col-md-12">{{errorText}}</div>
 </div>
+<form>
+    <button type="button" class="btn btn-primary" ng-click="login()">Войти</button>
+    <a class="btn btn-default text-left" ui-sref="register">Зарегистрироваться</a>
+</form>

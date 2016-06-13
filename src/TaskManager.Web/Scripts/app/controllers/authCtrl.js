@@ -1,15 +1,19 @@
-﻿angular.module("app.controllers").controller("authCtrl" [
+﻿angular.module("app.controllers").controller("authCtrl", [
     "$scope", "$rootScope", "$state", "authService",
     function ($scope, $rootScope, $state, authService) {
         $scope.userName = "";
         $scope.password = "";
         $scope.showError = false;
+        $scope.errorText = "Не удалось войти в систему";
 
         $scope.login = function () {
             $scope.showError = false;
             authService.login($scope.userName, $scope.password).then(function () {
                 $state.go("main");
-            }, function () { $scope.showError = true; });
+            }, function(err) {
+                $scope.errorText = err.data.error_description;
+                $scope.showError = true;
+            });
         }
     }
 ]);

@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using SimpleInjector;
 using SimpleInjector.Integration.Web.Mvc;
 using SimpleInjector.Integration.WebApi;
@@ -12,6 +14,9 @@ using TaskManager.DataLayer.Common.Filters;
 using TaskManager.DataLayer.Common.Interfaces;
 using TaskManager.DataLayer.MsSql;
 using TaskManager.DataLayer.MsSql.Dto;
+using TaskManager.DataLayer.MsSql.Specialized;
+using TaskManager.Web.Controllers;
+using TaskManager.Web.Models;
 
 namespace TaskManager.Web
 {
@@ -40,6 +45,9 @@ namespace TaskManager.Web
             GlobalConfiguration.Configuration.DependencyResolver =
                 new SimpleInjectorWebApiDependencyResolver(_container);
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(_container));
+
+            _container.Register<AccountController>(() => new AccountController());
+            _container.Options.AllowOverridingRegistrations = false;
         }
 
         private static void InitConverters()
@@ -79,6 +87,11 @@ namespace TaskManager.Web
             _container.Register<IRepository<UserInfo, string>>(() => new CrudSqlRepository<UserInfo, string, UserInfoDto>(Resolve<IEntityDtoConverter<UserInfo, UserInfoDto>>(), userCommandsBundle));
             _container.Register<IRepository<Category, int>>(() => new CrudSqlRepository<Category, int, CategoryDto>(Resolve<IEntityDtoConverter<Category, CategoryDto>>(), categoryCommandsBundle));
             _container.Register<IRepository<UserTask, int>>(() => new CrudSqlRepository<UserTask, int, UserTaskDto>(Resolve<IEntityDtoConverter<UserTask, UserTaskDto>>(), taskCommandsBundle));
+
+            _container.Register<IFilteredRepository<Category, CategoriesByUserFilter>>(() => new SqlFilteredRepository<Category, CategoriesByUserFilter>(new SqlCommandInfo("GetUserCategories", CommandType.StoredProcedure)));
+
+            _container.Register<IFilteredRepository<UserTask, TasksByUserFilter>>(() => new SqlFilteredRepository<UserTask, TasksByUserFilter>(new SqlCommandInfo("GetUserTasks", CommandType.StoredProcedure)));
+            _container.Register<IFilteredRepository<UserTask, TasksByCategoryFilter>>(() => new SqlFilteredRepository<UserTask, TasksByCategoryFilter>(new SqlCommandInfo("GetTasksByCategory", CommandType.StoredProcedure)));
         }
 
         private static void InitEntityServices()

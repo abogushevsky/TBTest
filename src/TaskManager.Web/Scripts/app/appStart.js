@@ -36,6 +36,12 @@ angular.module("app", ["ui.router", "app.controllers", "app.services", "ngRoute"
                 templateUrl: "Templates/Auth.html",
                 controller: "authCtrl"
             })
+            .state("register",
+            {
+                url: "/register",
+                templateUrl: "Templates/Register.html",
+                controller: "registerCtrl"
+            })
             .state("main",
             {
                 url: "/",

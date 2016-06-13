@@ -8,12 +8,10 @@
 	@ModifiedTimestamp timestamp
 AS
 BEGIN
-	DECLARE @rowVersion timestamp;
-	SELECT @rowVersion = (SELECT ModifiedTimestamp FROM [dbo].[Tasks] WHERE Id = @Id)
-	IF @ModifiedTimestamp != @rowVersion
-	BEGIN
-		RAISERROR(50005, 12, 12);
-	END
+	--DECLARE @rowVersion timestamp;
+	--SELECT @rowVersion = (SELECT ModifiedTimestamp FROM [dbo].[Tasks] WHERE Id = @Id)
+	--IF @ModifiedTimestamp != @rowVersion
+		--TODO: Raise error
 
 	UPDATE [dbo].[Tasks] SET Title = @Title, Details = @Details, DueDate = @DueDate, CategoryId = @CategoryId, UserId = @UserId
 	WHERE Id = @Id

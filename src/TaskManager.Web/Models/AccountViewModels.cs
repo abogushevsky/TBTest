@@ -32,6 +32,10 @@ namespace TaskManager.Web.Models
         public bool HasRegistered { get; set; }
 
         public string LoginProvider { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
     }
 
     public class UserLoginInfoViewModel

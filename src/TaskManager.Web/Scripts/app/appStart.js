@@ -69,8 +69,7 @@ angular.module("app.directives", [])
         }
     }]);
 
-angular.module("app").run(["$route", "$rootScope", "$location", "$http", function ($route, $rootScope, $location, $http) {
-    console.log("RUN!");
+angular.module("app").run(["$route", "$rootScope", "$location", "$http", "authService", function ($route, $rootScope, $location, $http, authService) {
     //BEGIN: инициализация SignalR
     $rootScope.connection = $.connection;
     $rootScope.tasksHub = $rootScope.connection.tasksHub;

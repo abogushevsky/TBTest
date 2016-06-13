@@ -24,7 +24,7 @@ namespace TaskManager.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
-    public class AccountController : ApiController
+    public class AccountController : TaskManagerApiControllerBase
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
@@ -60,16 +60,25 @@ namespace TaskManager.Web.Controllers
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
-        public UserInfoViewModel GetUserInfo()
+        public async Task<UserInfoViewModel> GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
-            return new UserInfoViewModel
+            UserInfoViewModel result = new UserInfoViewModel
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
+
+            ApplicationUser user = await GetCurrentUser();
+            if (user != null)
+            {
+                result.FirstName = user.FirstName;
+                result.LastName = user.LastName;
+            }
+
+            return result;
         }
 
         // POST api/Account/Logout

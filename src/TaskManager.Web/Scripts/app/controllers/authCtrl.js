@@ -6,6 +6,8 @@
         $scope.showError = false;
         $scope.errorText = "Не удалось войти в систему";
 
+        authService.logout();
+
         $scope.login = function () {
             $scope.showError = false;
             authService.login($scope.userName, $scope.password).then(function () {

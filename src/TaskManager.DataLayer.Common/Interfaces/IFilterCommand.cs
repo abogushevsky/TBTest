@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace TaskManager.DataLayer.Common.Interfaces
 {
     /// <summary>
-    /// Интерфейс описывает репозиторий, позволяющий выполнять фильтрующий запросы, 
+    /// Интерфейс описывает репозиторий, позволяющий выполнять фильтрующие запросы, 
     /// используя данные фильтра типа <see cref="TFilter"/>
     /// </summary>
     /// <typeparam name="TEntity">Тип сущностей</typeparam>

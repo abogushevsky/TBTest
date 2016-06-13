@@ -62,6 +62,8 @@ namespace TaskManager.Web
 
         private static void InitRepositories()
         {
+            //Названия хранимых процедур, используемых слоем DAL собраны в одном месте.  
+            //Их можно вынести в какое-нибудь внешнее хранилище, или в конфигурационный файл.
             CrudCommandsBundle categoryCommandsBundle = new CrudCommandsBundle()
             {
                 GetAllCommand = new SqlCommandInfo("sp_GetAllCategories", CommandType.StoredProcedure),
@@ -106,7 +108,6 @@ namespace TaskManager.Web
 
         private static void InitEntityServices()
         {
-            //_container.Register<IUsersService>(() => new UsersService(Resolve<IRepository<UserInfo, string>>()), Lifestyle.Singleton);
             _container.Register<ICategoriesService>(() => new CategoriesService(
                 Resolve<IRepository<Category, int>>(), 
                 Resolve<IFilteredRepository<Category, CategoriesByUserFilter>>()), Lifestyle.Singleton);

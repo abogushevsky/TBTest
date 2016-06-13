@@ -6,7 +6,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using TaskManager.Common.Entities;
-using TaskManager.Common.Interfaces;
 using TaskManager.Web.Models;
 
 namespace TaskManager.Web
@@ -15,15 +14,10 @@ namespace TaskManager.Web
 
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        private readonly IUsersService usersService;
-
-        public ApplicationUserManager(IUserStore<ApplicationUser> store, IUsersService usersService)
+        public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
             Contract.Requires(store != null);
-            Contract.Requires(usersService != null);
-
-            this.usersService = usersService;
         }
 
         //#region Overrides of UserManager<ApplicationUser,string>
@@ -61,7 +55,7 @@ namespace TaskManager.Web
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()), SimpleInjectorWebApiInitializer.Resolve<IUsersService>());
+            ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {

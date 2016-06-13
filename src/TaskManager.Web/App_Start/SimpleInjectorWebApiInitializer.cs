@@ -59,37 +59,37 @@ namespace TaskManager.Web
 
         private static void InitRepositories()
         {
-            CrudCommandsBundle userCommandsBundle = new CrudCommandsBundle()
-            {
-                GetAllCommand = new SqlCommandInfo("GetAllUserInfos", CommandType.StoredProcedure),
-                GetByIdCommand = new SqlCommandInfo("GetUserInfoById", CommandType.StoredProcedure),
-                CreateCommand = new SqlCommandInfo("CreateUserInfo", CommandType.StoredProcedure),
-                UpdateCommand = new SqlCommandInfo("UpdateUserInfo", CommandType.StoredProcedure),
-                DeleteCommand = new SqlCommandInfo("DeleteUserInfo", CommandType.StoredProcedure)
-            };
+            //CrudCommandsBundle userCommandsBundle = new CrudCommandsBundle()
+            //{
+            //    GetAllCommand = new SqlCommandInfo("GetAllUserInfos", CommandType.StoredProcedure),
+            //    GetByIdCommand = new SqlCommandInfo("GetUserInfoById", CommandType.StoredProcedure),
+            //    CreateCommand = new SqlCommandInfo("CreateUserInfo", CommandType.StoredProcedure),
+            //    UpdateCommand = new SqlCommandInfo("UpdateUserInfo", CommandType.StoredProcedure),
+            //    DeleteCommand = new SqlCommandInfo("DeleteUserInfo", CommandType.StoredProcedure)
+            //};
 
             CrudCommandsBundle categoryCommandsBundle = new CrudCommandsBundle()
             {
-                GetAllCommand = new SqlCommandInfo("GetAllCategories", CommandType.StoredProcedure),
-                GetByIdCommand = new SqlCommandInfo("GetCategoryById", CommandType.StoredProcedure),
-                CreateCommand = new SqlCommandInfo("CreateCategory", CommandType.StoredProcedure),
-                UpdateCommand = new SqlCommandInfo("UpdateCategory", CommandType.StoredProcedure),
-                DeleteCommand = new SqlCommandInfo("DeleteCategory", CommandType.StoredProcedure)
+                GetAllCommand = new SqlCommandInfo("sp_GetAllCategories", CommandType.StoredProcedure),
+                GetByIdCommand = new SqlCommandInfo("sp_GetCategoryById", CommandType.StoredProcedure),
+                CreateCommand = new SqlCommandInfo("sp_CreateCategory", CommandType.StoredProcedure),
+                UpdateCommand = new SqlCommandInfo("sp_UpdateCategory", CommandType.StoredProcedure),
+                DeleteCommand = new SqlCommandInfo("sp_DeleteCategory", CommandType.StoredProcedure)
             };
 
             CrudCommandsBundle taskCommandsBundle = new CrudCommandsBundle()
             {
-                GetAllCommand = new SqlCommandInfo("GetAllTasks", CommandType.StoredProcedure),
-                GetByIdCommand = new SqlCommandInfo("GeTaskById", CommandType.StoredProcedure),
-                CreateCommand = new SqlCommandInfo("CreateTask", CommandType.StoredProcedure),
-                UpdateCommand = new SqlCommandInfo("UpdateTask", CommandType.StoredProcedure),
-                DeleteCommand = new SqlCommandInfo("DeleteTask", CommandType.StoredProcedure)
+                GetAllCommand = new SqlCommandInfo("sp_GetAllTasks", CommandType.StoredProcedure),
+                GetByIdCommand = new SqlCommandInfo("sp_GeTaskById", CommandType.StoredProcedure),
+                CreateCommand = new SqlCommandInfo("sp_CreateTask", CommandType.StoredProcedure),
+                UpdateCommand = new SqlCommandInfo("sp_UpdateTask", CommandType.StoredProcedure),
+                DeleteCommand = new SqlCommandInfo("sp_DeleteTask", CommandType.StoredProcedure)
             };
 
-            _container.Register<IRepository<UserInfo, string>>(() => new CrudSqlRepository<UserInfo, string, UserInfoDto>(
-                Resolve<IEntityDtoConverter<UserInfo, UserInfoDto>>(), 
-                userCommandsBundle, 
-                CONNECTION_STRING_NAME));
+            //_container.Register<IRepository<UserInfo, string>>(() => new CrudSqlRepository<UserInfo, string, UserInfoDto>(
+            //    Resolve<IEntityDtoConverter<UserInfo, UserInfoDto>>(), 
+            //    userCommandsBundle, 
+            //    CONNECTION_STRING_NAME));
             _container.Register<IRepository<Category, int>>(() => new CrudSqlRepository<Category, int, CategoryDto>(
                 Resolve<IEntityDtoConverter<Category, CategoryDto>>(), 
                 categoryCommandsBundle, 
@@ -100,14 +100,14 @@ namespace TaskManager.Web
                 CONNECTION_STRING_NAME));
 
             _container.Register<IFilteredRepository<Category, CategoriesByUserFilter>>(() => new SqlFilteredRepository<Category, CategoriesByUserFilter>(
-                new SqlCommandInfo("GetUserCategories", CommandType.StoredProcedure), 
+                new SqlCommandInfo("sp_GetUserCategories", CommandType.StoredProcedure), 
                 CONNECTION_STRING_NAME));
 
             _container.Register<IFilteredRepository<UserTask, TasksByUserFilter>>(() => new SqlFilteredRepository<UserTask, TasksByUserFilter>(
-                new SqlCommandInfo("GetUserTasks", CommandType.StoredProcedure),
+                new SqlCommandInfo("sp_GetUserTasks", CommandType.StoredProcedure),
                 CONNECTION_STRING_NAME));
             _container.Register<IFilteredRepository<UserTask, TasksByCategoryFilter>>(() => new SqlFilteredRepository<UserTask, TasksByCategoryFilter>(
-                new SqlCommandInfo("GetTasksByCategory", CommandType.StoredProcedure), 
+                new SqlCommandInfo("sp_GetTasksByCategory", CommandType.StoredProcedure), 
                 CONNECTION_STRING_NAME));
         }
 

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+using TaskManager.Web.Filters;
 
 namespace TaskManager.Web
 {
@@ -16,6 +17,8 @@ namespace TaskManager.Web
             // Configure Web API to use only bearer token authentication.
             //config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+            config.Filters.Add(new BusinessExceptionFilter());
+            config.Filters.Add(new UnhandledExceptionFilter());
 
             // Web API routes
             config.MapHttpAttributeRoutes();

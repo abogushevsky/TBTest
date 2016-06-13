@@ -8,5 +8,5 @@
     [UserId] NVARCHAR(128) NOT NULL, 
     [ModifiedTimestamp] TIMESTAMP NOT NULL, 
     CONSTRAINT [FK_Tasks_Categories] FOREIGN KEY ([CategoryId]) REFERENCES [Categories]([Id]), 
-    CONSTRAINT [FK_Tasks_UserInfos] FOREIGN KEY ([UserId]) REFERENCES [UserInfos]([Id])
+    CONSTRAINT [FK_Tasks_Users] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id])
 )

@@ -4,5 +4,5 @@
     [Name] NVARCHAR(128) NOT NULL, 
     [ModifiedTimestamp] TIMESTAMP NOT NULL, 
     [UserId] NVARCHAR(128) NOT NULL, 
-    CONSTRAINT [FK_Categories_ToUserInfos] FOREIGN KEY ([UserId]) REFERENCES [UserInfos]([Id])
+    CONSTRAINT [FK_Categories_ToUsers] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id])
 )

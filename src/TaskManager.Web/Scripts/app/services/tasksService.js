@@ -6,6 +6,9 @@
                 return $http.get("api/tasks").then(
                     function (resp) { return resp.data; },
                     function (err) { console.log(err); });
+            },
+            getById: function(id) {
+                return null;
             }
         }
     }

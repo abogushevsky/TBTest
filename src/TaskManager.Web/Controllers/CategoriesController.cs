@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.AspNet.Identity.Owin;
 using TaskManager.Common.Entities;
 using TaskManager.Common.Interfaces;
 using TaskManager.Web.Models;
@@ -14,16 +13,15 @@ using TaskManager.Web.Properties;
 
 namespace TaskManager.Web.Controllers
 {
-    [Authorize]
-    public class TasksController : TaskManagerApiControllerBase
+    public class CategoriesController : TaskManagerApiControllerBase
     {
-        private readonly ITaskService taskService;
+        private readonly ICategoriesService categoriesService;
 
-        public TasksController(ITaskService taskService)
+        public CategoriesController(ICategoriesService categoriesService)
         {
-            Contract.Requires(taskService != null);
+            Contract.Requires(categoriesService != null);
 
-            this.taskService = taskService;
+            this.categoriesService = categoriesService;
         }
 
         // GET api/<controller>
@@ -32,35 +30,35 @@ namespace TaskManager.Web.Controllers
             ApplicationUser currentUser = await GetCurrentUser();
             if (currentUser == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "");
-            UserTask[] tasks = await this.taskService.GetAllUserTasksAsync(currentUser.Id);
-            return this.Request.CreateResponse(tasks.Select(t => new TaskListItemModel(t)));
+            Category[] categories = await this.categoriesService.GetUserCategoriesAsync(currentUser.Id);
+            return this.Request.CreateResponse(categories.Select(c => new CategoryModel(c)));
         }
 
         // GET api/<controller>/5
         public async Task<HttpResponseMessage> Get(int id)
         {
-            UserTask task = await this.taskService.GetTaskByIdAsync(id);
-            if (task == null)
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, Resources.TaskNotFound);
-            return this.Request.CreateResponse(new TaskModel(task));
+            Category category = await this.categoriesService.GetCategoryById(id);
+            if (category == null)
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, Resources.CategoryNotFound);
+            return this.Request.CreateResponse(new CategoryModel(category));
         }
 
         // POST api/<controller>
-        public async Task<HttpResponseMessage> Post([FromBody] TaskModel task)
+        public async Task<HttpResponseMessage> Post([FromBody] CategoryModel category)
         {
-            if (task == null)
+            if (category == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Resources.DataNotSet);
-            await this.taskService.AddTaskAsync(task.ToUserTask(await GetCurrentUser()));
+            await this.categoriesService.AddCategoryAsync(category.ToCategory(await GetCurrentUser()));
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
         // PUT api/<controller>/5
-        public async Task<HttpResponseMessage> Put([FromBody]TaskModel task)
+        public async Task<HttpResponseMessage> Put([FromBody]CategoryModel category)
         {
-            if (task == null)
+            if (category == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Resources.DataNotSet);
 
-            bool result = await this.taskService.UpdateTaskAsync(task.ToUserTask(await GetCurrentUser()));
+            bool result = await this.categoriesService.UpdateCategoryAsync(category.ToCategory(await GetCurrentUser()));
             if (!result)
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, Resources.DataSaveError);
 
@@ -70,7 +68,7 @@ namespace TaskManager.Web.Controllers
         // DELETE api/<controller>/5
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            bool result = await this.taskService.DeleteTaskAsync(id);
+            bool result = await this.categoriesService.DeleteCategoryAsync(id);
             if (!result)
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, Resources.DataRemoveError);
 

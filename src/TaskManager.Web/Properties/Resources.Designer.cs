@@ -61,6 +61,42 @@ namespace TaskManager.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Категория не найдена.
+        /// </summary>
+        public static string CategoryNotFound {
+            get {
+                return ResourceManager.GetString("CategoryNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не указаны данные.
+        /// </summary>
+        public static string DataNotSet {
+            get {
+                return ResourceManager.GetString("DataNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ошибка при удалении данных.
+        /// </summary>
+        public static string DataRemoveError {
+            get {
+                return ResourceManager.GetString("DataRemoveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ошибка при сохарнении данных.
+        /// </summary>
+        public static string DataSaveError {
+            get {
+                return ResourceManager.GetString("DataSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Заполните адрес email.
         /// </summary>
         public static string EmailValidationError {
@@ -147,6 +183,15 @@ namespace TaskManager.Web.Properties {
         public static string RegisterBindingModel_Password_Password {
             get {
                 return ResourceManager.GetString("RegisterBindingModel_Password_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Задача не найдена.
+        /// </summary>
+        public static string TaskNotFound {
+            get {
+                return ResourceManager.GetString("TaskNotFound", resourceCulture);
             }
         }
     }

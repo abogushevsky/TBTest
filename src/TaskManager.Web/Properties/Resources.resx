@@ -147,4 +147,19 @@
   <data name="RegisterBindingModel_ConfirmPassword_Confirm_password" xml:space="preserve">
     <value>Подтвердение пароля</value>
   </data>
+  <data name="TaskNotFound" xml:space="preserve">
+    <value>Задача не найдена</value>
+  </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Категория не найдена</value>
+  </data>
+  <data name="DataNotSet" xml:space="preserve">
+    <value>Не указаны данные</value>
+  </data>
+  <data name="DataRemoveError" xml:space="preserve">
+    <value>Ошибка при удалении данных</value>
+  </data>
+  <data name="DataSaveError" xml:space="preserve">
+    <value>Ошибка при сохарнении данных</value>
+  </data>
 </root>

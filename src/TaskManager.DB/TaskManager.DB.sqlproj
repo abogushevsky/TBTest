@@ -77,6 +77,19 @@
     <Build Include="Programmability\StoredProcedures\CreateUserInfo.sql" />
     <Build Include="Programmability\StoredProcedures\UpdateUserInfo.sql" />
     <Build Include="Programmability\StoredProcedures\DeleteUserInfo.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_GetAllTasks.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_GeTaskById.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_CreateTask.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_UpdateTask.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_DeleteTask.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_GetUserTasks.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_GetTasksByCategory.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_GetUserCategories.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_GetAllCategories.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_GetCategoryById.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_CreateCategory.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_UpdateCategory.sql" />
+    <Build Include="Programmability\StoredProcedures\sp_DeleteCategory.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="TaskManager.DB.refactorlog" />

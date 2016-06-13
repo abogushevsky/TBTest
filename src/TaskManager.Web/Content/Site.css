@@ -13,3 +13,7 @@
     color: Red;
     padding-bottom: 10px;
 }
+
+.add-task-btn {
+    font-size: 30pt;
+}

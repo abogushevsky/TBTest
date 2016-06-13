@@ -4,14 +4,14 @@ using TaskManager.Common.Entities;
 
 namespace TaskManager.Web.Models
 {
-    public class TaskModel
+    public class TaskListItemModel
     {
-        public TaskModel()
+        public TaskListItemModel()
         {
             
         }
 
-        public TaskModel(UserTask task)
+        public TaskListItemModel(UserTask task)
         {
             Contract.Requires(task != null);
 
@@ -28,5 +28,44 @@ namespace TaskManager.Web.Models
         public Category Category { get; set; }
 
         public DateTime DueDate { get; set; }
+
+        
+    }
+
+    public class TaskModel : TaskListItemModel
+    {
+        public TaskModel()
+        {
+
+        }
+
+        public TaskModel(UserTask task) : base(task)
+        {
+            Contract.Requires(task != null);
+
+            this.Details = task.Details;
+        }
+
+        public string Details { get; set; }
+
+        public UserTask ToUserTask(ApplicationUser user)
+        {
+            Contract.Requires(user != null);
+
+            return new UserTask()
+            {
+                Id = this.Id,
+                Title = this.Title,
+                Details = this.Details,
+                DueDate = this.DueDate,
+                Category = this.Category,
+                User = new UserInfo()
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName
+                }
+            };
+        }
     }
 }

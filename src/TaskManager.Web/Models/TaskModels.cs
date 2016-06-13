@@ -68,4 +68,24 @@ namespace TaskManager.Web.Models
             };
         }
     }
+
+    public class TaskChangeModel
+    {
+        public TaskChangeModel()
+        {
+            
+        }
+
+        public TaskChangeModel(TaskChangedEventArgs taskChangeDetails)
+        {
+            Contract.Requires(taskChangeDetails != null);
+
+            this.Task = new TaskModel(taskChangeDetails.Task);
+            this.ChangeType = taskChangeDetails.ChangeType;
+        }
+
+        public TaskModel Task { get; set; }
+
+        public ChangeTypes ChangeType { get; set; }
+    }
 }

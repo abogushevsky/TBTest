@@ -16,6 +16,7 @@ using TaskManager.DataLayer.MsSql;
 using TaskManager.DataLayer.MsSql.Dto;
 using TaskManager.DataLayer.MsSql.Specialized;
 using TaskManager.Web.Controllers;
+using TaskManager.Web.Hubs;
 using TaskManager.Web.Models;
 
 namespace TaskManager.Web
@@ -37,6 +38,7 @@ namespace TaskManager.Web
             _container = new Container();
             _container.Options.AllowOverridingRegistrations = true;
 
+            InitSignalR();
             InitConverters();
             InitRepositories();
             InitEntityServices();
@@ -49,25 +51,17 @@ namespace TaskManager.Web
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(_container));
 
             _container.Register<AccountController>(() => new AccountController(Resolve<IUsersService>()));
-            _container.Options.AllowOverridingRegistrations = false;
         }
 
         private static void InitConverters()
         {
-            _container.Register(typeof(IEntityDtoConverter<,>), new[] { Assembly.Load("TaskManager.DataLayer.MsSql") }, Lifestyle.Singleton);
+            _container.Register<IEntityDtoConverter<Category, CategoryDto>>(() => new CategoryConverter());
+            _container.Register<IEntityDtoConverter<UserTask, UserTaskDto>>(() => new UserTaskConverter());
+            //_container.Register(typeof(IEntityDtoConverter<,>), new[] { Assembly.Load("TaskManager.DataLayer.MsSql") }, Lifestyle.Singleton);
         }
 
         private static void InitRepositories()
         {
-            //CrudCommandsBundle userCommandsBundle = new CrudCommandsBundle()
-            //{
-            //    GetAllCommand = new SqlCommandInfo("GetAllUserInfos", CommandType.StoredProcedure),
-            //    GetByIdCommand = new SqlCommandInfo("GetUserInfoById", CommandType.StoredProcedure),
-            //    CreateCommand = new SqlCommandInfo("CreateUserInfo", CommandType.StoredProcedure),
-            //    UpdateCommand = new SqlCommandInfo("UpdateUserInfo", CommandType.StoredProcedure),
-            //    DeleteCommand = new SqlCommandInfo("DeleteUserInfo", CommandType.StoredProcedure)
-            //};
-
             CrudCommandsBundle categoryCommandsBundle = new CrudCommandsBundle()
             {
                 GetAllCommand = new SqlCommandInfo("sp_GetAllCategories", CommandType.StoredProcedure),
@@ -85,11 +79,7 @@ namespace TaskManager.Web
                 UpdateCommand = new SqlCommandInfo("sp_UpdateTask", CommandType.StoredProcedure),
                 DeleteCommand = new SqlCommandInfo("sp_DeleteTask", CommandType.StoredProcedure)
             };
-
-            //_container.Register<IRepository<UserInfo, string>>(() => new CrudSqlRepository<UserInfo, string, UserInfoDto>(
-            //    Resolve<IEntityDtoConverter<UserInfo, UserInfoDto>>(), 
-            //    userCommandsBundle, 
-            //    CONNECTION_STRING_NAME));
+            
             _container.Register<IRepository<Category, int>>(() => new CrudSqlRepository<Category, int, CategoryDto>(
                 Resolve<IEntityDtoConverter<Category, CategoryDto>>(), 
                 categoryCommandsBundle, 
@@ -116,7 +106,7 @@ namespace TaskManager.Web
 
         private static void InitEntityServices()
         {
-            _container.Register<IUsersService>(() => new UsersService(Resolve<IRepository<UserInfo, string>>()), Lifestyle.Singleton);
+            //_container.Register<IUsersService>(() => new UsersService(Resolve<IRepository<UserInfo, string>>()), Lifestyle.Singleton);
             _container.Register<ICategoriesService>(() => new CategoriesService(
                 Resolve<IRepository<Category, int>>(), 
                 Resolve<IFilteredRepository<Category, CategoriesByUserFilter>>()), Lifestyle.Singleton);
@@ -124,6 +114,12 @@ namespace TaskManager.Web
                 Resolve<IRepository<UserTask, int>>(), 
                 Resolve<IFilteredRepository<UserTask, TasksByUserFilter>>(),
                 Resolve<IFilteredRepository<UserTask, TasksByCategoryFilter>>()), Lifestyle.Singleton);
+        }
+
+        private static void InitSignalR()
+        {
+            _container.Register<Microsoft.AspNet.SignalR.IDependencyResolver>(() => new SignalRSimpleInjectorDependencyResolver(_container));
+            _container.Register<TasksHub>();
         }
 
         public static T Resolve<T>() where T : class

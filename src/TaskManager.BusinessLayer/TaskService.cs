@@ -72,7 +72,7 @@ namespace TaskManager.BusinessLayer
         public async Task<int> AddTaskAsync(UserTask task)
         {
             int result = await ExecOnRepositoryAsync(r => r.CreateAsync(task));
-            OnTaskChanged(new TaskChangedEventArgs(task, ChangeTypes.Added));
+            OnTaskChanged(new TaskChangedEventArgs(task, task.User.Id, ChangeTypes.Added));
             return result;
         }
 
@@ -84,7 +84,7 @@ namespace TaskManager.BusinessLayer
         public async Task<bool> UpdateTaskAsync(UserTask task)
         {
             bool result = await ExecOnRepositoryAsync(r => r.UpdateAsync(task));
-            OnTaskChanged(new TaskChangedEventArgs(task, ChangeTypes.Edited));
+            OnTaskChanged(new TaskChangedEventArgs(task, task.User.Id, ChangeTypes.Edited));
             return result;
         }
 
@@ -92,11 +92,12 @@ namespace TaskManager.BusinessLayer
         /// Удаление задачи
         /// </summary>
         /// <param name="id">Идентификатор задачи</param>
+        /// <param name="userId">Идентификатор пользователя-владельца задачи</param>
         /// <returns>Призак успеха операции</returns>
-        public async Task<bool> DeleteTaskAsync(int id)
+        public async Task<bool> DeleteTaskAsync(int id, string userId)
         {
             bool result = await ExecOnRepositoryAsync(r => r.DeleteAsync(id));
-            OnTaskChanged(new TaskChangedEventArgs(new UserTask() {Id = id}, ChangeTypes.Deleted));
+            OnTaskChanged(new TaskChangedEventArgs(new UserTask() {Id = id}, userId, ChangeTypes.Deleted));
             return result;
         }
 

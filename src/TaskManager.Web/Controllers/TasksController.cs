@@ -70,7 +70,8 @@ namespace TaskManager.Web.Controllers
         // DELETE api/<controller>/5
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            bool result = await this.taskService.DeleteTaskAsync(id);
+            ApplicationUser currentUser = await GetCurrentUser();
+            bool result = await this.taskService.DeleteTaskAsync(id, currentUser.Id);
             if (!result)
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, Resources.DataRemoveError);
 

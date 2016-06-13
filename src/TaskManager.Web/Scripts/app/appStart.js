@@ -70,4 +70,38 @@ angular.module("app.directives", [])
     }]);
 
 angular.module("app").run(["$route", "$rootScope", "$location", "$http", function ($route, $rootScope, $location, $http) {
+    console.log("RUN!");
+    //BEGIN: инициализация SignalR
+    $rootScope.connection = $.connection;
+    $rootScope.tasksHub = $rootScope.connection.tasksHub;
+    $rootScope.connection.tasksHub.connection.logging = true;
+
+    $rootScope.tasksHub.client.taskUpdated = function (message) {
+        console.log("Task update recieved!");
+        console.log(message);
+        $rootScope.$broadcast("taskUpdated", message);
+    };
+
+    function start() {
+        $rootScope.connection.hub.start().done(function (e) {
+            // console.log('Done!');
+        });
+    };
+
+    $rootScope.connection.hub.reconnecting(function () {
+        // console.log('disconnected!');
+    });
+
+    $rootScope.connection.hub.reconnected(function () {
+        //  console.log('reconnected!');
+    });
+
+    $rootScope.connection.hub.disconnected(function () {
+        // console.log('disconnected!');
+        setTimeout(function () {
+            start();
+        }, 5000); // Restart connection after 5 seconds.
+    });
+
+    start();
 }]);

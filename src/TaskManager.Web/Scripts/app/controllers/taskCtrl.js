@@ -1,6 +1,6 @@
 ﻿angular.module("app.controllers").controller("taskCtrl", [
-    "$scope", "$rootScope", "$state", "$stateParams", "tasksService", "categoriesService",
-    function ($scope, $rootScope, $state, $stateParams, tasksService, categoriesService) {
+    "$scope", "$rootScope", "$state", "$stateParams", "tasksService", "categoriesService", "webSocketService",
+    function ($scope, $rootScope, $state, $stateParams, tasksService, categoriesService, webSocketService) {
         $scope.task = {};
         $scope.categories = [];
         $scope.isNew = false;
@@ -76,5 +76,14 @@
                     );
             }
         };
+
+        $rootScope.$on("taskUpdated",
+            function(event, taskChangeDetails) {
+                if (taskChangeDetails.ChangeType == 1 && taskChangeDetails.Task.Id == $scope.task.Id) {
+                    $scope.task = taskChangeDetails.Task;
+                    $scope.DueDate = new Date(taskChangeDetails.Task.DueDate);
+                    $scope.$apply();
+                }
+            });
     }
 ]);

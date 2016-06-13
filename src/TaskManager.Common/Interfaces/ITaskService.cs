@@ -55,8 +55,9 @@ namespace TaskManager.Common.Interfaces
         /// Удаление задачи
         /// </summary>
         /// <param name="id">Идентификатор задачи</param>
+        /// <param name="userId">Идентификатор пользователя-владельца задачи</param>
         /// <returns>Призак успеха операции</returns>
-        Task<bool> DeleteTaskAsync(int id);
+        Task<bool> DeleteTaskAsync(int id, string userId);
     }
 
     [ContractClassFor(typeof(ITaskService))]
@@ -98,8 +99,10 @@ namespace TaskManager.Common.Interfaces
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> DeleteTaskAsync(int id)
+        public Task<bool> DeleteTaskAsync(int id, string userId)
         {
+            Contract.Requires(userId != null);
+
             throw new System.NotImplementedException();
         }
     }

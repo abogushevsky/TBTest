@@ -17,41 +17,7 @@ namespace TaskManager.Web
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
-            Contract.Requires(store != null);
         }
-
-        //#region Overrides of UserManager<ApplicationUser,string>
-
-        ///// <summary>Create a user with the given password</summary>
-        ///// <param name="user"></param>
-        ///// <param name="password"></param>
-        ///// <returns></returns>
-        //public override async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
-        //{
-        //    IdentityResult result = await base.CreateAsync(user, password);
-
-        //    ApplicationUser createdUser = await FindByNameAsync(user.UserName);
-        //    if (createdUser != null)
-        //    {
-        //        try
-        //        {
-        //            await this.usersService.AddUserAsync(new UserInfo()
-        //            {
-        //                Id = createdUser.Id,
-        //                FirstName = user.FirstName,
-        //                LastName = user.LastName
-        //            });
-        //        }
-        //        catch
-        //        {
-        //            await DeleteAsync(createdUser);
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
-        //#endregion
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {

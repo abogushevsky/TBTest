@@ -20,7 +20,7 @@ namespace TaskManager.Common.Entities
         /// <summary>
         /// Крайний срок выполнения задачи
         /// </summary>
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
 
         /// <summary>
         /// Категория задачи

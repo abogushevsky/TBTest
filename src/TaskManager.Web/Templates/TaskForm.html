@@ -4,7 +4,7 @@
             <label for="title">Название</label>
             <div class="row">
                 <div class="col-md-12">
-                    <input type="text" class="form-control" id="title" ng-model="taks.Title"/>
+                    <input type="text" class="form-control" id="title" ng-model="task.Title"/>
                 </div>
             </div>
         </div>
@@ -14,7 +14,7 @@
             <label for="dueDate">Выполнить до</label>
             <div class="row">
                 <div class="col-md-12">
-                    <input type="date" class="form-control" id="dueDate" ng-model="taks.DueDate"/>
+                    <input type="date" class="form-control" id="dueDate" ng-model="task.DueDate"/>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <label for="category">Категория</label>
             <div class="row">
                 <div class="col-md-12">
-                    <select class="form-control selectpicker" id="category" ng-model="task.Category.Id">
+                    <select class="form-control selectpicker" id="category" ng-model="task.Category.Id" convert-to-number>
                         <option ng-repeat="category in categories | orderBy: 'Name'" value="{{category.Id}}">
                             {{category.Name}}
                         </option>
@@ -67,3 +67,7 @@
         </div>
     </div>
 </div>
+<form>
+    <button type="submit" class="btn btn-primary" ng-click="onSave()">Сохранить</button>
+    <a class="btn btn-default" ui-sref="main">Отмена</a>
+</form>

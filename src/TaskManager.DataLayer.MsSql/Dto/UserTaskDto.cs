@@ -13,7 +13,7 @@ namespace TaskManager.DataLayer.MsSql.Dto
 
         public string Details { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
 
         public string UserId { get; set; }
 
@@ -21,14 +21,19 @@ namespace TaskManager.DataLayer.MsSql.Dto
 
         public string UserLastName { get; set; }
 
-        public string CategoryName { get; set; }
-
         public int? CategoryId { get; set; }
+
+        public string CategoryName { get; set; }
 
         public byte[] ModifiedTimestamp { get; set; }
 
         #region Overrides of SqlDto
 
+        /// <summary>
+        /// Метод формирует набор параметров для передачи в хранимую процедуру добавления
+        /// новой записи. Названия свойств должны совпадать с названиями параметров процедуры
+        /// </summary>
+        /// <returns></returns>
         public override object GetParametersForInsert()
         {
             return new
@@ -37,10 +42,15 @@ namespace TaskManager.DataLayer.MsSql.Dto
                 Details = this.Details,
                 DueDate = this.DueDate,
                 CategoryId = this.CategoryId,
-                UserId = this.UserId
+                UserId = this.UserId,
             };
         }
 
+        /// <summary>
+        /// Метод формирует набор параметров для передачи в хранимую процедуру редактирования
+        /// записи. Названия свойств должны совпадать с названиями параметров процедуры
+        /// </summary>
+        /// <returns></returns>
         public override object GetParametersForUpdate()
         {
             return new

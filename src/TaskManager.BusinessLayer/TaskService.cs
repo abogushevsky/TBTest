@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using TaskManager.Common.Entities;
 using TaskManager.Common.Interfaces;
@@ -30,6 +31,8 @@ namespace TaskManager.BusinessLayer
             this.tasksByUserFilter = tasksByUserFilter;
             this.tasksByCategoryFilter = tasksByCategoryFilter;
         }
+
+        public event EventHandler<TaskChangedEventArgs> TaskChanged;
 
         /// <summary>
         /// Получение всех задач пользователя
@@ -68,7 +71,9 @@ namespace TaskManager.BusinessLayer
         /// <returns>Идентификатор добавленной задачи</returns>
         public async Task<int> AddTaskAsync(UserTask task)
         {
-            return await ExecOnRepositoryAsync(r => r.CreateAsync(task));
+            int result = await ExecOnRepositoryAsync(r => r.CreateAsync(task));
+            OnTaskChanged(new TaskChangedEventArgs(task, ChangeTypes.Added));
+            return result;
         }
 
         /// <summary>
@@ -78,7 +83,9 @@ namespace TaskManager.BusinessLayer
         /// <returns>Признак успеха операции</returns>
         public async Task<bool> UpdateTaskAsync(UserTask task)
         {
-            return await ExecOnRepositoryAsync(r => r.UpdateAsync(task));
+            bool result = await ExecOnRepositoryAsync(r => r.UpdateAsync(task));
+            OnTaskChanged(new TaskChangedEventArgs(task, ChangeTypes.Edited));
+            return result;
         }
 
         /// <summary>
@@ -88,7 +95,15 @@ namespace TaskManager.BusinessLayer
         /// <returns>Призак успеха операции</returns>
         public async Task<bool> DeleteTaskAsync(int id)
         {
-            return await ExecOnRepositoryAsync(r => r.DeleteAsync(id));
+            bool result = await ExecOnRepositoryAsync(r => r.DeleteAsync(id));
+            OnTaskChanged(new TaskChangedEventArgs(new UserTask() {Id = id}, ChangeTypes.Deleted));
+            return result;
+        }
+
+        protected virtual void OnTaskChanged(TaskChangedEventArgs e)
+        {
+            if (TaskChanged != null)
+                TaskChanged(this, e);
         }
     }
 }

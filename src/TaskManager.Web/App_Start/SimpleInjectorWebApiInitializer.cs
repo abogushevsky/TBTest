@@ -93,34 +93,37 @@ namespace TaskManager.Web
             _container.Register<IRepository<Category, int>>(() => new CrudSqlRepository<Category, int, CategoryDto>(
                 Resolve<IEntityDtoConverter<Category, CategoryDto>>(), 
                 categoryCommandsBundle, 
-                CONNECTION_STRING_NAME));
+                CONNECTION_STRING_NAME), Lifestyle.Singleton);
             _container.Register<IRepository<UserTask, int>>(() => new CrudSqlRepository<UserTask, int, UserTaskDto>(
                 Resolve<IEntityDtoConverter<UserTask, UserTaskDto>>(), 
                 taskCommandsBundle, 
-                CONNECTION_STRING_NAME));
+                CONNECTION_STRING_NAME), Lifestyle.Singleton);
 
-            _container.Register<IFilteredRepository<Category, CategoriesByUserFilter>>(() => new SqlFilteredRepository<Category, CategoriesByUserFilter>(
+            _container.Register<IFilteredRepository<Category, CategoriesByUserFilter>>(() => new SqlFilteredRepository<Category, CategoryDto, CategoriesByUserFilter>(
                 new SqlCommandInfo("sp_GetUserCategories", CommandType.StoredProcedure), 
-                CONNECTION_STRING_NAME));
+                CONNECTION_STRING_NAME,
+                Resolve<IEntityDtoConverter<Category, CategoryDto>>()), Lifestyle.Singleton);
 
-            _container.Register<IFilteredRepository<UserTask, TasksByUserFilter>>(() => new SqlFilteredRepository<UserTask, TasksByUserFilter>(
+            _container.Register<IFilteredRepository<UserTask, TasksByUserFilter>>(() => new SqlFilteredRepository<UserTask, UserTaskDto, TasksByUserFilter>(
                 new SqlCommandInfo("sp_GetUserTasks", CommandType.StoredProcedure),
-                CONNECTION_STRING_NAME));
-            _container.Register<IFilteredRepository<UserTask, TasksByCategoryFilter>>(() => new SqlFilteredRepository<UserTask, TasksByCategoryFilter>(
+                CONNECTION_STRING_NAME,
+                Resolve<IEntityDtoConverter<UserTask, UserTaskDto>>()), Lifestyle.Singleton);
+            _container.Register<IFilteredRepository<UserTask, TasksByCategoryFilter>>(() => new SqlFilteredRepository<UserTask, UserTaskDto, TasksByCategoryFilter>(
                 new SqlCommandInfo("sp_GetTasksByCategory", CommandType.StoredProcedure), 
-                CONNECTION_STRING_NAME));
+                CONNECTION_STRING_NAME,
+                Resolve<IEntityDtoConverter<UserTask, UserTaskDto>>()), Lifestyle.Singleton);
         }
 
         private static void InitEntityServices()
         {
-            _container.Register<IUsersService>(() => new UsersService(Resolve<IRepository<UserInfo, string>>()));
+            _container.Register<IUsersService>(() => new UsersService(Resolve<IRepository<UserInfo, string>>()), Lifestyle.Singleton);
             _container.Register<ICategoriesService>(() => new CategoriesService(
                 Resolve<IRepository<Category, int>>(), 
-                Resolve<IFilteredRepository<Category, CategoriesByUserFilter>>()));
+                Resolve<IFilteredRepository<Category, CategoriesByUserFilter>>()), Lifestyle.Singleton);
             _container.Register<ITaskService>(() => new TaskService(
                 Resolve<IRepository<UserTask, int>>(), 
                 Resolve<IFilteredRepository<UserTask, TasksByUserFilter>>(),
-                Resolve<IFilteredRepository<UserTask, TasksByCategoryFilter>>()));
+                Resolve<IFilteredRepository<UserTask, TasksByCategoryFilter>>()), Lifestyle.Singleton);
         }
 
         public static T Resolve<T>() where T : class

@@ -19,7 +19,11 @@
                         if (!$scope.isNew)
                             tasksService.getById(id)
                                 .then(
-                                    function(data) { $scope.tasksList = data },
+                                    function(data) {
+                                        $scope.task = data;
+                                        $scope.task.DueDate = new Date(data.DueDate);
+                                        console.log($scope.task);
+                                    },
                                     function(err) {
                                         alert(err
                                             .Message
@@ -53,6 +57,22 @@
                                 }, function (err) { });
                         },
                         function (err) { alert(err.Message ? err.Message : "Не удалось сохранить категорию"); }
+                    );
+            }
+        };
+
+        $scope.onSave = function () {
+            if ($scope.isNew) {
+                tasksService.addTask($scope.task)
+                    .then(
+                        function(data) { $state.go("main"); },
+                        function(err) { alert(err.Message ? err.Message : "Не удалось сохранить задачу"); }
+                    );
+            } else {
+                tasksService.updateTask($scope.task)
+                    .then(
+                        function (data) { $state.go("main"); },
+                        function (err) { alert(err.Message ? err.Message : "Не удалось отредактировать задачу"); }
                     );
             }
         };

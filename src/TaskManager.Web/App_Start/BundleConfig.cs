@@ -25,6 +25,7 @@ namespace TaskManager.Web
                       "~/Scripts/angular-route.js",
                       "~/Scripts/angular-ui-router.js",
                       "~/Scripts/angular-sanitize.js",
+                      "~/Scripts/angular-filter.js",
                       "~/Scripts/angular-ui/ui-bootstrap-tpls.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/app")

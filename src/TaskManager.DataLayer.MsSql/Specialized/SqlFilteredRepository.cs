@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManager.DataLayer.Common.Interfaces;
+using TaskManager.DataLayer.MsSql.Dto;
 
 namespace TaskManager.DataLayer.MsSql.Specialized
 {
@@ -10,21 +11,29 @@ namespace TaskManager.DataLayer.MsSql.Specialized
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TFilter"></typeparam>
-    public class SqlFilteredRepository<TEntity, TFilter> : SqlRepositoryBase, IFilteredRepository<TEntity, TFilter>
+    public class SqlFilteredRepository<TEntity, TDto, TFilter> : SqlRepositoryBase, IFilteredRepository<TEntity, TFilter>
+        where TDto : SqlDto
     {
         private readonly SqlCommandInfo command;
+        private readonly IEntityDtoConverter<TEntity, TDto> converter;
 
         /// <summary>
         /// .ctor
         /// </summary>
         /// <param name="command">Сведения о запросе, который должен быть выполнен в БД</param>
         /// <param name="connectionStringName">Имя строки подключения в конфигурационном файле</param>
-        public SqlFilteredRepository(SqlCommandInfo command, string connectionStringName) : base(connectionStringName)
+        /// <param name="converter">Конвертер для перевода сущностей в DTO и обратно</param>
+        public SqlFilteredRepository(
+            SqlCommandInfo command, 
+            string connectionStringName, 
+            IEntityDtoConverter<TEntity, TDto> converter) : base(connectionStringName)
         {
             Contract.Requires(!string.IsNullOrEmpty(command.Command));
             Contract.Requires(!string.IsNullOrEmpty(connectionStringName));
+            Contract.Requires(converter != null);
 
             this.command = command;
+            this.converter = converter;
         }
 
         /// <summary>
@@ -34,7 +43,8 @@ namespace TaskManager.DataLayer.MsSql.Specialized
         /// <returns>Найденные сущности или пустой массив</returns>
         public async Task<TEntity[]> FilterAsync(TFilter filter)
         {
-            return (await UsingConnectionAsync<TEntity>(this.command, filter)).ToArray();
+            TDto[] result = (await UsingConnectionAsync<TDto>(this.command, filter)).ToArray();
+            return result.Select(this.converter.Convert).ToArray();
         }
     }
 }

@@ -8,5 +8,16 @@
         }
 
         $scope.init();
+
+        $scope.getCatName = function(name) {
+            if (!name || name == "undefined")
+                return "Без категории";
+
+            return name;
+        };
+
+        $scope.editTask = function(id) {
+            $state.go("task", { id: id });
+        };
     }
 ]);

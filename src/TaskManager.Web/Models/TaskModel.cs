@@ -18,7 +18,7 @@ namespace TaskManager.Web.Models
             this.Id = task.Id;
             this.Title = task.Title;
             this.Category = task.Category;
-            this.DueDate = task.DueDate;
+            this.DueDate = task.DueDate.HasValue ? task.DueDate.Value : DateTime.MinValue;
         }
 
         public int Id { get; set; }
@@ -57,7 +57,7 @@ namespace TaskManager.Web.Models
                 Id = this.Id,
                 Title = this.Title,
                 Details = this.Details,
-                DueDate = this.DueDate,
+                DueDate = this.DueDate == DateTime.MinValue ? (DateTime?) null : this.DueDate,
                 Category = this.Category,
                 User = new UserInfo()
                 {

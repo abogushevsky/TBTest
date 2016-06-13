@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\TaskChangedEventArgs.cs" />
     <Compile Include="Entities\UserTask.cs" />
     <Compile Include="Entities\UserInfo.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />

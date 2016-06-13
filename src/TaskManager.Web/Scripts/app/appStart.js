@@ -1,7 +1,8 @@
 ﻿angular.module("app.controllers", []);
+angular.module("app.directives", []);
 angular.module("app.services", []);
 
-angular.module("app", ["ui.router", "app.controllers", "app.services", "ui.bootstrap", "ngRoute"]).config([
+angular.module("app", ["ui.router", "app.controllers", "app.services", "ui.bootstrap", "ngRoute", "angular.filter"]).config([
     "$stateProvider", "$urlRouterProvider", "$httpProvider",
     function($stateProvider, $urlRouterProvider, $httpProvider) {
         $urlRouterProvider.otherwise("/");
@@ -56,6 +57,17 @@ angular.module("app", ["ui.router", "app.controllers", "app.services", "ui.boots
             });
     }
 ]);
+
+angular.module("app.directives", [])
+        .directive('convertToNumber', [function () {
+        return {
+            require: 'ngModel',
+            link: function(scope, element, attrs, ngModel) {
+                ngModel.$parsers.push(function(val) { return (val ? parseInt(val, 10) : null) });
+                ngModel.$formatters.push(function(val) { return (val ? "" + val : null) });
+            }
+        }
+    }]);
 
 angular.module("app").run(["$route", "$rootScope", "$location", "$http", function ($route, $rootScope, $location, $http) {
 }]);

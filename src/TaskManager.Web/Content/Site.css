@@ -25,3 +25,22 @@
 textarea {
     resize: none;
 }
+
+.cat-plank {
+    background-color: lightseagreen;
+    padding: 5px;
+    color: white;
+    margin-top: 15px;
+    font-size: 12pt;
+}
+
+.task-list-item {
+    padding: 5px;
+    border-bottom: 1px solid lightseagreen;
+    font-size: 12pt;
+}
+
+.task-list-item:hover {
+    background-color: lightblue;
+    cursor: pointer;
+}

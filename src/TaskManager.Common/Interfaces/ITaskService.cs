@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using TaskManager.Common.Entities;
 
@@ -10,6 +11,11 @@ namespace TaskManager.Common.Interfaces
     [ContractClass(typeof(ITaskServiceContracts))]
     public interface ITaskService
     {
+        /// <summary>
+        /// Событие, возникающее при изменении или добавлении задачи
+        /// </summary>
+        event EventHandler<TaskChangedEventArgs> TaskChanged;
+
         /// <summary>
         /// Получение всех задач пользователя
         /// </summary>
@@ -56,6 +62,8 @@ namespace TaskManager.Common.Interfaces
     [ContractClassFor(typeof(ITaskService))]
     internal abstract class ITaskServiceContracts : ITaskService
     {
+        public event EventHandler<TaskChangedEventArgs> TaskChanged;
+
         public Task<UserTask[]> GetAllUserTasksAsync(string userId)
         {
             Contract.Requires(userId != null);

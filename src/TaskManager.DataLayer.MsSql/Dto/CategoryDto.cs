@@ -20,6 +20,11 @@ namespace TaskManager.DataLayer.MsSql.Dto
 
         #region Overrides of DtoBase
 
+        /// <summary>
+        /// Метод формирует набор параметров для передачи в хранимую процедуру добавления
+        /// новой записи. Названия свойств должны совпадать с названиями параметров процедуры
+        /// </summary>
+        /// <returns></returns>
         public override object GetParametersForInsert()
         {
             return new
@@ -29,6 +34,11 @@ namespace TaskManager.DataLayer.MsSql.Dto
             };
         }
 
+        /// <summary>
+        /// Метод формирует набор параметров для передачи в хранимую процедуру редактирования
+        /// записи. Названия свойств должны совпадать с названиями параметров процедуры
+        /// </summary>
+        /// <returns></returns>
         public override object GetParametersForUpdate()
         {
             return new

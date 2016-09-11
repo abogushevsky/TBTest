@@ -31,8 +31,8 @@ namespace TaskManager.DataLayer.MsSql
         public CrudSqlRepository(IEntityDtoConverter<TEntity, TDto> converter, CrudCommandsBundle commands, string connectionStringName)
             : base(connectionStringName)
         {
-            Contract.Ensures(converter != null);
-            Contract.Ensures(commands != null);
+            Contract.Requires(converter != null);
+            Contract.Requires(commands != null);
             Contract.Requires(!string.IsNullOrEmpty(connectionStringName));
 
             this.converter = converter;

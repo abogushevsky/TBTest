@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace TaskManager.DataLayer.Common.Filters
+﻿namespace TaskManager.DataLayer.Common.Filters
 {
     public class CategoriesByUserFilter
     {

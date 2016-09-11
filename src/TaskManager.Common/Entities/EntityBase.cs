@@ -1,5 +1,4 @@
-﻿using System;
-using TaskManager.Common.Interfaces;
+﻿using TaskManager.Common.Interfaces;
 
 namespace TaskManager.Common.Entities
 {

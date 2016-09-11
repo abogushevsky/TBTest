@@ -2,8 +2,6 @@
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using SimpleInjector;
 using SimpleInjector.Integration.Web.Mvc;
 using SimpleInjector.Integration.WebApi;
@@ -17,7 +15,6 @@ using TaskManager.DataLayer.MsSql.Dto;
 using TaskManager.DataLayer.MsSql.Specialized;
 using TaskManager.Web.Controllers;
 using TaskManager.Web.Hubs;
-using TaskManager.Web.Models;
 
 namespace TaskManager.Web
 {

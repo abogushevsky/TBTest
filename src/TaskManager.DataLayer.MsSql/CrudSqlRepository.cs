@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
 using TaskManager.Common.Interfaces;
 using TaskManager.DataLayer.Common.Exceptions;
 using TaskManager.DataLayer.Common.Interfaces;

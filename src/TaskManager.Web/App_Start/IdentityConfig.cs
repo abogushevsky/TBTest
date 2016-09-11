@@ -1,11 +1,8 @@
-﻿using System.Diagnostics.Contracts;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.DataProtection;
-using TaskManager.Common.Entities;
 using TaskManager.Web.Models;
 
 namespace TaskManager.Web

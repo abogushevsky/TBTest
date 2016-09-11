@@ -97,10 +97,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.RedisSessionStateProvider, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.RedisSessionStateProvider.2.2.0\lib\net40\Microsoft.Web.RedisSessionStateProvider.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="SimpleInjector, Version=2.5.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleInjector.2.5.2\lib\net45\SimpleInjector.dll</HintPath>
       <Private>True</Private>

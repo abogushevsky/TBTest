@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using Dapper;
-using TaskManager.Common.Interfaces;
 using TaskManager.DataLayer.Common.Exceptions;
 
 namespace TaskManager.DataLayer.MsSql

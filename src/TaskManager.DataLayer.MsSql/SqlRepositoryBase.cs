@@ -45,13 +45,11 @@ namespace TaskManager.DataLayer.MsSql
                         throw new ConcurrentUpdateException();
                     }
 
-                    //TODO: log
                     throw new RepositoryException();
                 }
                 catch (Exception ex)
                 {
                     if (transaction != null) transaction.Rollback();
-                    //TODO: log
                     throw new RepositoryException();
                 }
             }
